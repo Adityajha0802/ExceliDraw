@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
-   "imports":{
-    "#*":"./dist/*"
+  "imports": {
+    "#*": "./dist/*"
   },
   "scripts": {
     "build": "tsc -b",
@@ -12,15 +12,18 @@
     "start": "node ./dist/index.js"
   },
   "devDependencies": {
+    "@repo/db": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@repo/db":"workspace:*"
+    "@repo/backend-common":"workspace:*",
+    "@types/ws": "^8.18.1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@types/ws": "^8.18.1",
+    "@types/jsonwebtoken": "^9.0.10",
+    "jsonwebtoken": "^9.0.2",
     "ws": "^8.18.3"
   }
 }

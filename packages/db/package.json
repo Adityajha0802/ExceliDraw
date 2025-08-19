@@ -10,10 +10,7 @@
     "dev": "tsc --watch"
   },
   "exports":{
-    "./client":{
-      "types":"./src/index.ts",
-      "default":"./dist/index.js"
-    }
+    "./client":"./dist/index.js"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*"
