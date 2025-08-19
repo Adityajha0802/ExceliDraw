@@ -1,0 +1,6 @@
+*.ts linguist-language=TypeScript
+*.tsx linguist-language=TypeScript
+*.js linguist-generated=true
+*.jsx linguist-generated=true
+dist/* linguist-generated=true
+node_modules/* linguist-vendored=true
