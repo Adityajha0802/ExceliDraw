@@ -6,13 +6,14 @@ import { Middleware } from "#middleware.js";
 import {CreateUserSchema, Signup, } from "@repo/common/types"
 
 const app=express();
- 
 app.use(express.json())
 
 app.post("/signup",async(req,res)=>{
+
     //@ts-ignore
-   const data:Signup=CreateUserSchema.safeParse(req.body)
-   if(!data){
+   const data:Signup=CreateUserSchema.safeParse(req.body);
+   //@ts-ignore
+   if(!data.success){
         res.status(403).json({
             message:"Incorrect inputs"        
         })

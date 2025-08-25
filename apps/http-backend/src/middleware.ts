@@ -6,8 +6,7 @@ import jwt from "jsonwebtoken";
 export const Middleware=(req:Request,res:Response,next:NextFunction)=>{
     const token=req.headers["authorization"];
 
-    try{
-        
+    try{ 
         const decodeduser=jwt.verify(token as string,JWT_SECRET);
         //@ts-ignore
         req.userId=decodeduser.id;
