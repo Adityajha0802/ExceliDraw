@@ -1,78 +1,108 @@
 import express from "express";
-import {client} from "@repo/db/client"
+import { client } from "@repo/db/client"
 import jwt from "jsonwebtoken";
-import {JWT_SECRET} from "@repo/backend-common/config";
+import { JWT_SECRET } from "@repo/backend-common/config";
 import { Middleware } from "#middleware.js";
-import {CreateUserSchema, Signup, } from "@repo/common/types"
+import { CreateRoomSchema, CreateUserSchema, SigninSchema } from "@repo/common/types"
 
-const app=express();
+const app = express();
 app.use(express.json())
 
-app.post("/signup",async(req,res)=>{
+app.post("/signup", async (req, res) => {
 
-    //@ts-ignore
-   const data:Signup=CreateUserSchema.safeParse(req.body);
-   //@ts-ignore
-   if(!data.success){
+    const parsedData = CreateUserSchema.safeParse(req.body);
+    if (!parsedData.success) {
+        console.log(parsedData.error);
         res.status(403).json({
-            message:"Incorrect inputs"        
+            message: "Incorrect inputs"
         })
         return;
-   }
-    await client.user.create({
-        data:{
-            username:data.username,
-            firstName:data.firstName,
-            lastName:data.lastName,
-            password:data.password
-        }
-    })
-
-    res.json({
-        message:"You have SignedUp"
-    })
+    }
+    try {
+        await client.user.create({
+            data: {
+                username: parsedData.data?.username,
+                email: parsedData.data?.email,
+                firstName: parsedData.data.firstName,
+                lastName: parsedData.data.lastName,
+                password: parsedData.data.password
+            }
+        })
+        res.json({
+            message: "You have SignedUp"
+        })
+    } catch (e) {
+        res.status(411).json({
+            message: "User already exist with this username or email"
+        })
+    }
 })
 
-app.post("/signin",async(req,res)=>{
-    const username=req.body.username;
-    const password=req.body.password;
+app.post("/signin", async (req, res) => {
 
-    const user= await client.user.findUnique(username);
+    const parsedData = SigninSchema.safeParse(req.body);
+    if (!parsedData.success) {
+        res.status(403).json({
+            message: "Incorrect inputs"
+        })
+        return;
+    }
 
-    if(user){
-        const token= jwt.sign({
-            id:user.id
-        },JWT_SECRET)
+    const user = await client.user.findUnique({
+        where: {
+            username: parsedData.data.username,
+            password:parsedData.data.password
+        }
+    }
+    );
+
+    if (user) {
+        const token = jwt.sign({
+            id: user?.id
+        }, JWT_SECRET)
 
         res.json({
-            message:"You are logged in",
-            token:token
+            token: token
         })
     }
-    else{
+    else {
         res.status(403).json({
-            message:"Error while signing in"
+            message: "User doesn't exist"
         })
     }
-    
+
 })
 
-app.post("/room",Middleware,async(req,res)=>{
-    
-    const roomName = req.body.roomName;
-    //@ts-ignore
-    const id=req.userId;
+app.post("/room", Middleware, async (req, res) => {
 
-    await client.room.create({
-        data:{
-            name:roomName,
-            username:id.username
+    const parsedData = CreateRoomSchema.safeParse(req.body);
+    if (!parsedData.success) {
+        res.status(403).json({
+            message: "Incorrect inputs"
+        })
+        return;
+    }
+    //@ts-ignore
+    const userId = req.userId;
+    try{
+
+    
+    const room = await client.room.create({
+        data: {
+            slug: parsedData.data.name,
+            creatorId:userId
         }
     })
 
     res.json({
-        message:"Room created"  
+        message: "Room created",
+        roomId:room.id
     })
+    } catch(e){
+        res.status(411).json({
+            message:"Room already exists with this name"
+        })
+    }
 
 })
 app.listen(3001);
