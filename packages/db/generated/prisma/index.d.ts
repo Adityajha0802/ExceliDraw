@@ -2280,62 +2280,66 @@ export namespace Prisma {
 
   export type RoomAvgAggregateOutputType = {
     id: number | null
+    creatorId: number | null
   }
 
   export type RoomSumAggregateOutputType = {
     id: number | null
+    creatorId: number | null
   }
 
   export type RoomMinAggregateOutputType = {
     id: number | null
     slug: string | null
     createdAt: Date | null
-    username: string | null
+    creatorId: number | null
   }
 
   export type RoomMaxAggregateOutputType = {
     id: number | null
     slug: string | null
     createdAt: Date | null
-    username: string | null
+    creatorId: number | null
   }
 
   export type RoomCountAggregateOutputType = {
     id: number
     slug: number
     createdAt: number
-    username: number
+    creatorId: number
     _all: number
   }
 
 
   export type RoomAvgAggregateInputType = {
     id?: true
+    creatorId?: true
   }
 
   export type RoomSumAggregateInputType = {
     id?: true
+    creatorId?: true
   }
 
   export type RoomMinAggregateInputType = {
     id?: true
     slug?: true
     createdAt?: true
-    username?: true
+    creatorId?: true
   }
 
   export type RoomMaxAggregateInputType = {
     id?: true
     slug?: true
     createdAt?: true
-    username?: true
+    creatorId?: true
   }
 
   export type RoomCountAggregateInputType = {
     id?: true
     slug?: true
     createdAt?: true
-    username?: true
+    creatorId?: true
     _all?: true
   }
 
@@ -2429,7 +2433,7 @@ export namespace Prisma {
     id: number
     slug: string
     createdAt: Date
-    username: string
+    creatorId: number
     _count: RoomCountAggregateOutputType | null
     _avg: RoomAvgAggregateOutputType | null
     _sum: RoomSumAggregateOutputType | null
@@ -2455,7 +2459,7 @@ export namespace Prisma {
     id?: boolean
     slug?: boolean
     createdAt?: boolean
-    username?: boolean
+    creatorId?: boolean
     creator?: boolean | UserDefaultArgs<ExtArgs>
     chats?: boolean | Room$chatsArgs<ExtArgs>
     _count?: boolean | RoomCountOutputTypeDefaultArgs<ExtArgs>
@@ -2465,7 +2469,7 @@ export namespace Prisma {
     id?: boolean
     slug?: boolean
     createdAt?: boolean
-    username?: boolean
+    creatorId?: boolean
     creator?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["room"]>
 
@@ -2473,7 +2477,7 @@ export namespace Prisma {
     id?: boolean
     slug?: boolean
     createdAt?: boolean
-    username?: boolean
+    creatorId?: boolean
     creator?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["room"]>
 
@@ -2481,10 +2485,10 @@ export namespace Prisma {
     id?: boolean
     slug?: boolean
     createdAt?: boolean
-    username?: boolean
+    creatorId?: boolean
   }
 
-  export type RoomOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "createdAt" | "username", ExtArgs["result"]["room"]>
+  export type RoomOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "createdAt" | "creatorId", ExtArgs["result"]["room"]>
   export type RoomInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     creator?: boolean | UserDefaultArgs<ExtArgs>
     chats?: boolean | Room$chatsArgs<ExtArgs>
@@ -2507,7 +2511,7 @@ export namespace Prisma {
       id: number
       slug: string
       createdAt: Date
-      username: string
+      creatorId: number
     }, ExtArgs["result"]["room"]>
     composites: {}
   }
@@ -2936,7 +2940,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Room", 'Int'>
     readonly slug: FieldRef<"Room", 'String'>
     readonly createdAt: FieldRef<"Room", 'DateTime'>
-    readonly username: FieldRef<"Room", 'String'>
+    readonly creatorId: FieldRef<"Room", 'Int'>
   }
     
 
@@ -4501,7 +4505,7 @@ export namespace Prisma {
     id: 'id',
     slug: 'slug',
     createdAt: 'createdAt',
-    username: 'username'
+    creatorId: 'creatorId'
   };
 
   export type RoomScalarFieldEnum = (typeof RoomScalarFieldEnum)[keyof typeof RoomScalarFieldEnum]
@@ -4635,17 +4639,17 @@ export namespace Prisma {
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     username?: string
+    email?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
-    email?: StringFilter<"User"> | string
     firstName?: StringFilter<"User"> | string
     lastName?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     photo?: StringNullableFilter<"User"> | string | null
     rooms?: RoomListRelationFilter
     chats?: ChatListRelationFilter
-  }, "id" | "username">
+  }, "id" | "username" | "email">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -4682,7 +4686,7 @@ export namespace Prisma {
     id?: IntFilter<"Room"> | number
     slug?: StringFilter<"Room"> | string
     createdAt?: DateTimeFilter<"Room"> | Date | string
-    username?: StringFilter<"Room"> | string
+    creatorId?: IntFilter<"Room"> | number
     creator?: XOR<UserScalarRelationFilter, UserWhereInput>
     chats?: ChatListRelationFilter
   }
@@ -4691,28 +4695,28 @@ export namespace Prisma {
     id?: SortOrder
     slug?: SortOrder
     createdAt?: SortOrder
-    username?: SortOrder
+    creatorId?: SortOrder
     creator?: UserOrderByWithRelationInput
     chats?: ChatOrderByRelationAggregateInput
   }
 
   export type RoomWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    slug?: string
     AND?: RoomWhereInput | RoomWhereInput[]
     OR?: RoomWhereInput[]
     NOT?: RoomWhereInput | RoomWhereInput[]
-    slug?: StringFilter<"Room"> | string
     createdAt?: DateTimeFilter<"Room"> | Date | string
-    username?: StringFilter<"Room"> | string
+    creatorId?: IntFilter<"Room"> | number
     creator?: XOR<UserScalarRelationFilter, UserWhereInput>
     chats?: ChatListRelationFilter
-  }, "id">
+  }, "id" | "slug">
 
   export type RoomOrderByWithAggregationInput = {
     id?: SortOrder
     slug?: SortOrder
     createdAt?: SortOrder
-    username?: SortOrder
+    creatorId?: SortOrder
     _count?: RoomCountOrderByAggregateInput
     _avg?: RoomAvgOrderByAggregateInput
     _max?: RoomMaxOrderByAggregateInput
@@ -4727,7 +4731,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Room"> | number
     slug?: StringWithAggregatesFilter<"Room"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Room"> | Date | string
-    username?: StringWithAggregatesFilter<"Room"> | string
+    creatorId?: IntWithAggregatesFilter<"Room"> | number
   }
 
   export type ChatWhereInput = {
@@ -4871,7 +4875,7 @@ export namespace Prisma {
     id?: number
     slug: string
     createdAt?: Date | string
-    username: string
+    creatorId: number
     chats?: ChatUncheckedCreateNestedManyWithoutRoomInput
   }
 
@@ -4886,7 +4890,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     slug?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    username?: StringFieldUpdateOperationsInput | string
+    creatorId?: IntFieldUpdateOperationsInput | number
     chats?: ChatUncheckedUpdateManyWithoutRoomNestedInput
   }
 
@@ -4894,7 +4898,7 @@ export namespace Prisma {
     id?: number
     slug: string
     createdAt?: Date | string
-    username: string
+    creatorId: number
   }
 
   export type RoomUpdateManyMutationInput = {
@@ -4906,7 +4910,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     slug?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    username?: StringFieldUpdateOperationsInput | string
+    creatorId?: IntFieldUpdateOperationsInput | number
   }
 
   export type ChatCreateInput = {
@@ -5129,29 +5133,31 @@ export namespace Prisma {
     id?: SortOrder
     slug?: SortOrder
     createdAt?: SortOrder
-    username?: SortOrder
+    creatorId?: SortOrder
   }
 
   export type RoomAvgOrderByAggregateInput = {
     id?: SortOrder
+    creatorId?: SortOrder
   }
 
   export type RoomMaxOrderByAggregateInput = {
     id?: SortOrder
     slug?: SortOrder
     createdAt?: SortOrder
-    username?: SortOrder
+    creatorId?: SortOrder
   }
 
   export type RoomMinOrderByAggregateInput = {
     id?: SortOrder
     slug?: SortOrder
     createdAt?: SortOrder
-    username?: SortOrder
+    creatorId?: SortOrder
   }
 
   export type RoomSumOrderByAggregateInput = {
     id?: SortOrder
+    creatorId?: SortOrder
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -5597,7 +5603,7 @@ export namespace Prisma {
     id?: IntFilter<"Room"> | number
     slug?: StringFilter<"Room"> | string
     createdAt?: DateTimeFilter<"Room"> | Date | string
-    username?: StringFilter<"Room"> | string
+    creatorId?: IntFilter<"Room"> | number
   }
 
   export type ChatUpsertWithWhereUniqueWithoutUserInput = {
@@ -5731,7 +5737,7 @@ export namespace Prisma {
     id?: number
     slug: string
     createdAt?: Date | string
-    username: string
+    creatorId: number
   }
 
   export type RoomCreateOrConnectWithoutChatsInput = {
@@ -5786,7 +5792,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     slug?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    username?: StringFieldUpdateOperationsInput | string
+    creatorId?: IntFieldUpdateOperationsInput | number
   }
 
   export type UserUpsertWithoutChatsInput = {

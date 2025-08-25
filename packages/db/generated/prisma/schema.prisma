@@ -17,7 +17,7 @@ datasource db {
 model User {
   id        Int     @id @default(autoincrement())
   username  String  @unique
-  email     String
+  email     String  @unique
   firstName String
   lastName  String
   password  String
@@ -28,10 +28,10 @@ model User {
 
 model Room {
   id        Int      @id @default(autoincrement())
-  slug      String
+  slug      String   @unique
   createdAt DateTime @default(now())
-  username  String
-  creator   User     @relation(fields: [username], references: [username])
+  creatorId Int
+  creator   User     @relation(fields: [creatorId], references: [id])
   chats     Chat[]
 }
 
