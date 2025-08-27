@@ -51,7 +51,7 @@ app.post("/signin", async (req, res) => {
     const user = await client.user.findUnique({
         where: {
             username: parsedData.data.username,
-            password:parsedData.data.password
+            password: parsedData.data.password
         }
     }
     );
@@ -84,25 +84,43 @@ app.post("/room", Middleware, async (req, res) => {
     }
     //@ts-ignore
     const userId = req.userId;
-    try{
+    try {
 
-    
-    const room = await client.room.create({
-        data: {
-            slug: parsedData.data.name,
-            creatorId:userId
-        }
-    })
 
-    res.json({
-        message: "Room created",
-        roomId:room.id
-    })
-    } catch(e){
+        const room = await client.room.create({
+            data: {
+                slug: parsedData.data.name,
+                creatorId: userId
+            }
+        })
+
+        res.json({
+            message: "Room created",
+            roomId: room.id
+        })
+    } catch (e) {
         res.status(411).json({
-            message:"Room already exists with this name"
+            message: "Room already exists with this name"
         })
     }
 
+})
+
+app.get("/chats/:roomId", async (req, res) => {
+    const roomId = Number(req.params.roomId);
+
+    const messages = await client.chat.findMany({
+        where: {
+            roomId: roomId
+        },
+        orderBy: {
+            id: "desc"
+        },
+        take: 50
+    });
+
+    res.json({
+        messages
+    })
 })
 app.listen(3001);
