@@ -107,6 +107,7 @@ app.post("/room", Middleware, async (req, res) => {
 })
 
 app.get("/chats/:roomId", async (req, res) => {
+    try{
     const roomId = Number(req.params.roomId);
 
     const messages = await client.chat.findMany({
@@ -114,13 +115,34 @@ app.get("/chats/:roomId", async (req, res) => {
             roomId: roomId
         },
         orderBy: {
-            id: "desc"
+            id: "asc"
         },
         take: 50
     });
 
     res.json({
         messages
+    })
+    }catch(e){
+    
+        console.log(e);
+        res.json({
+            message:"Something went wrong"
+        })
+    }
+})
+
+app.get("/room/:slug", async (req, res) => {
+    const slug = req.params.slug;
+
+    const room = await client.room.findFirst({
+        where: {
+            slug: slug
+        }
+    });
+
+    res.json({
+        room
     })
 })
 app.listen(3001);
