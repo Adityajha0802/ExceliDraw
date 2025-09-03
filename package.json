@@ -16,5 +16,8 @@
   "packageManager": "pnpm@10.15.0",
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "lucide-react": "^0.542.0"
   }
 }
