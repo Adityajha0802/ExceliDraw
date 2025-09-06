@@ -4,9 +4,10 @@ import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "@repo/backend-common/config";
 import { Middleware } from "#middleware.js";
 import { CreateRoomSchema, CreateUserSchema, SigninSchema } from "@repo/common/types"
-
+import cors from "cors";
 const app = express();
 app.use(express.json())
+app.use(cors());
 
 app.post("/signup", async (req, res) => {
 
@@ -145,4 +146,4 @@ app.get("/room/:slug", async (req, res) => {
         room
     })
 })
-app.listen(3001);
+app.listen(3002);
