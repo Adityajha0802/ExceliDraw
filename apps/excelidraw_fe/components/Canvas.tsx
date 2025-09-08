@@ -13,6 +13,12 @@ export function Canvas({ roomId, socket }: {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [currentTool,setCurrentTool]=useState<shape>("circle");
 
+    useEffect(()=>{
+        //@ts-ignore
+        window.currentTool=currentTool;
+    },[currentTool])
+
+
     useEffect(() => {
         if (canvasRef.current) {
             const canvas = canvasRef.current;

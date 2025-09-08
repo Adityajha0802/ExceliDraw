@@ -9,22 +9,24 @@ type Shape = {
     height: number
 } | {
     type: "circle",
-    x: number,
-    y: number,
+    centerX: number,
+    centerY: number,
     radius: number
 } | {
     type:"line",
-    x:number,
-    y:number,
-    p:number,
-    q:number
+    X:number,
+    Y:number,
+    endX:number,
+    endY:number
 }
 export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket: WebSocket) {
 
     const context = canvas.getContext("2d");
+    
 
     const existingShapes: Shape[] = await getExistingShapes(roomId);
 
+    
     if (!context) {
         return;
     }
@@ -63,7 +65,11 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
         const width = e.clientX - startX;
         const height = e.clientY - startY;
         
-        const shape: Shape = {
+        let shape:Shape |null=null;
+        //@ts-ignore
+        const currentTool=window.currentTool
+        if(currentTool=="rectangle"){
+        shape= {
             type: "rect",
             x: startX,
             y: startY,
@@ -71,6 +77,27 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
             height
         }
     
+        }
+        else if(currentTool=="circle"){
+            const radius= Math.max(width,height)/2;
+        shape={
+            type:"circle",
+            centerX:startX + width/2,
+            centerY:startY + height/2,
+            radius :radius
+            }
+        }else if(currentTool=="line"){
+        shape={
+            type:"line",
+            X:startX ,
+            Y:startY ,
+            endX :e.clientX,
+            endY :e.clientY
+            }
+        }
+        if(!shape){
+            return;
+        }
         existingShapes.push(shape);
 
         socket.send(JSON.stringify({
@@ -88,8 +115,35 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
             let width = e.clientX - startX;
             let height = e.clientY - startY;
             ClearCanvas(context, canvas, existingShapes)
-            context.strokeRect(startX, startY, width, height)
-            context.strokeStyle = "rgba(255,255,255)"
+            context.strokeStyle = "rgba(255,255,255)";
+            //@ts-ignore
+            const currentTool=window.currentTool;
+            if(currentTool=="rectangle"){
+                context.strokeRect(startX, startY, width, height);
+                
+            }else if(currentTool=="circle"){
+                const rad=Math.abs(Math.max(width,height)/2);
+                const centerX=startX + width/2;
+                const centerY=startY + height/2;
+                const radius = rad;
+                context.beginPath();
+                context.arc(centerX,centerY,radius,0,Math.PI*2);
+                context.stroke();
+                context.closePath();
+                
+            }
+            else if(currentTool=="line"){
+                const X=startX ;
+                const Y=startY ;
+                const endX=e.clientX;
+                const endY=e.clientY;
+                context.beginPath(); 
+                context.moveTo(X,Y); 
+                context.lineTo(endX, endY);
+                context.stroke()
+                
+            }
+
         }
 
     })
@@ -101,10 +155,22 @@ function ClearCanvas(context: CanvasRenderingContext2D, canvas: HTMLCanvasElemen
     context.fillStyle = "rgba(0,0,0)";
     context.fillRect(0, 0, canvas.width, canvas.height);
 
-    existingShapes.map((shape) => {
+    existingShapes?.map((shape) => {
         if (shape.type == "rect") {
             context.strokeRect(shape.x, shape.y, shape.width, shape.height);
-            context.strokeStyle = "rgba(255,255,255)"
+            context.strokeStyle = "rgba(255,255,255)";
+        }else if(shape.type=="circle"){
+            context.beginPath();
+            context.arc(shape.centerX,shape.centerY,shape.radius,0,Math.PI*2);
+            context.stroke();
+            context.closePath();
+            context.strokeStyle = "rgba(255,255,255)";
+        }else if(shape.type=="line"){
+            context.beginPath(); 
+            context.moveTo(shape.X,shape.Y); 
+            context.lineTo(shape.endX,shape.endY);
+            context.stroke();
+            context.strokeStyle = "rgba(255,255,255)";
         }
     })
 
@@ -117,7 +183,7 @@ async function getExistingShapes(roomId: string) {
     const res = await axios.get(`${BACKEND_URL}/chats/${roomId}`);
     const messages = res.data.messages;
 
-    const shapes = messages.map((x: { message: string }) => {
+    const shapes = messages?.map((x: { message: string }) => {
         const messageData = JSON.parse(x.message)
         return messageData.shape;
     })
