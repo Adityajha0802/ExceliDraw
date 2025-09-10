@@ -18,7 +18,7 @@ type Shape = {
     Y: number,
     endX: number,
     endY: number
-} | null
+} 
 export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket: WebSocket) {
     const context = canvas.getContext("2d");
 
@@ -52,9 +52,6 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
     ClearCanvas(context, canvas, existingShapes);
 
     let clicked = false;
-    
-
-
     let startX=0;
     let startY=0;
     
@@ -68,7 +65,7 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
         const width = e.offsetX- startX;
         const height = e.offsetY - startY;
 
-        let shape: Shape = null
+        let shape: Shape|null = null;
         //@ts-ignore
         const currentTool = window.currentTool;
         if (currentTool == "rectangle") {
@@ -97,13 +94,12 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
                 endY:e.offsetY
             }
         }
-
         if(!shape){
-            return;
+            return
         }
-        
-        existingShapes.push(shape);
 
+        existingShapes.push(shape);
+    
         socket.send(JSON.stringify({
             type: "chat",
             message: JSON.stringify({
