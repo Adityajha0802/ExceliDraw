@@ -60,13 +60,13 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
     
     canvas.addEventListener("mousedown", (e) => {
         clicked = true;
-         startX = e.clientX;
-         startY = e.clientY;
+         startX = e.offsetX;
+         startY = e.offsetY;
     })
     canvas.addEventListener("mouseup", (e) => {
         clicked = false;
-        const width = e.clientX - startX;
-        const height = e.clientY - startY;
+        const width = e.offsetX- startX;
+        const height = e.offsetY - startY;
 
         let shape: Shape = null
         //@ts-ignore
@@ -93,9 +93,13 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
                 type: "line",
                 X: startX,
                 Y: startY,
-                endX: startX + width,
-                endY: startY + height
+                endX: e.offsetX,
+                endY:e.offsetY
             }
+        }
+
+        if(!shape){
+            return;
         }
         
         existingShapes.push(shape);
@@ -113,8 +117,8 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
     canvas.addEventListener("mousemove", (e) => {
         
         if (clicked) {
-            let width = e.clientX - startX;
-            let height = e.clientY - startY;
+            let width = e.offsetX - startX;
+            let height = e.offsetY - startY;
             ClearCanvas(context, canvas, existingShapes)
             context.strokeStyle = "rgba(255,255,255)";
             //@ts-ignore
@@ -136,8 +140,8 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
             else if (currentTool == "line") {
                 const X = startX;
                 const Y = startY;
-                const endX = e.clientX;
-                const endY = e.clientY;
+                const endX = e.offsetX;
+                const endY = e.offsetY;
                 context.beginPath();
                 context.moveTo(X, Y);
                 context.lineTo(endX, endY);

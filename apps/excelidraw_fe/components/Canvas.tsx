@@ -33,7 +33,7 @@ export function Canvas({ roomId, socket }: {
     }}>
        
         <ToolBar currentTool={currentTool} setCurrentTool={setCurrentTool}/>
-        <canvas ref={canvasRef}></canvas>
+        <canvas className="cursor-crosshair"ref={canvasRef}></canvas>
     </div>
 
 }
