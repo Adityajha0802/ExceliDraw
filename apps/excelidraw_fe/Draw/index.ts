@@ -97,8 +97,11 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
         if(!shape){
             return
         }
-
-        existingShapes.push(shape);
+        try{
+          existingShapes.push(shape);  
+        }catch(e){
+            console.log(e);
+        }
     
         socket.send(JSON.stringify({
             type: "chat",
