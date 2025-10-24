@@ -18,10 +18,11 @@ type Shape = {
     Y: number,
     endX: number,
     endY: number
-} 
+}
+
+
 export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket: WebSocket) {
     const context = canvas.getContext("2d");
-
 
     const existingShapes: Shape[] = await getExistingShapes(roomId);
 
@@ -150,6 +151,7 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
         }
 
     })
+
 }
 
 function ClearCanvas(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement, existingShapes: Shape[]) {
@@ -176,8 +178,6 @@ function ClearCanvas(context: CanvasRenderingContext2D, canvas: HTMLCanvasElemen
             
         }
     })
-
-
 
 }
 

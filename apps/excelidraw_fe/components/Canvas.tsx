@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import {  Circle, EraserIcon, RectangleHorizontalIcon, SlashIcon,  TextIcon} from "lucide-react";
 import { Icon } from "./Icons";
 
-type shape="rectangle"|"circle"|"line"|"text"|"eraser";
+type shape="rectangle"|"circle"|"line"|"text";
 export function Canvas({ roomId, socket }: {
     roomId: string,
     socket: WebSocket
@@ -55,9 +55,5 @@ function ToolBar({currentTool,setCurrentTool}:{
         <Icon icon={<TextIcon/>} onClick={()=>{
             setCurrentTool("text") 
         }} activated={currentTool==="text"}/>
-        <Icon icon={<EraserIcon/>} onClick={()=>{
-            setCurrentTool("eraser") 
-        }} activated={currentTool==="eraser"}/>
-
     </div>
 }
