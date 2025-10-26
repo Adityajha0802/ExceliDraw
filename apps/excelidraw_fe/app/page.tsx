@@ -27,16 +27,15 @@ export default function Home() {
 
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
           <Button
-            
-            className="cursor-pointer text-lg p-4 rounded-full shadow-lg hover:shadow-lg transition-all border-2 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:text-blue-800 dark:hover:text-white"
+            children={"Sign Up"}
+            className="cursor-pointer text-lg p-4 rounded-full shadow-lg hover:shadow-lg transition-all border-2 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:text-blue-900 dark:hover:text-white"
           >
-            Sign Up
           </Button>
 
           <Button
-            className="cursor-pointer text-lg p-4 rounded-full shadow-lg hover:shadow-lg transition-all  border-2 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:text-blue-800 dark:hover:text-white"
+            children={"Sign In"}
+            className="cursor-pointer text-lg p-4 rounded-full shadow-lg hover:shadow-lg transition-all  border-2 bg-slate-900 hover:bg-slate-800 dark:bg-blue-900 dark:text-white dark:hover:text-white"
           >
-            Sign In
           </Button>
         </div>
 
