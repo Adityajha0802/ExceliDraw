@@ -24,8 +24,6 @@ app.post("/signup", async (req, res) => {
             data: {
                 username: parsedData.data?.username,
                 email: parsedData.data?.email,
-                firstName: parsedData.data.firstName,
-                lastName: parsedData.data.lastName,
                 password: parsedData.data.password
             }
         })

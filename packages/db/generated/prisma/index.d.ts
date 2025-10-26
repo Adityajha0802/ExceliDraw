@@ -1132,8 +1132,6 @@ export namespace Prisma {
     id: number | null
     username: string | null
     email: string | null
-    firstName: string | null
-    lastName: string | null
     password: string | null
     photo: string | null
   }
@@ -1142,8 +1140,6 @@ export namespace Prisma {
     id: number | null
     username: string | null
     email: string | null
-    firstName: string | null
-    lastName: string | null
     password: string | null
     photo: string | null
   }
@@ -1152,8 +1148,6 @@ export namespace Prisma {
     id: number
     username: number
     email: number
-    firstName: number
-    lastName: number
     password: number
     photo: number
     _all: number
@@ -1172,8 +1166,6 @@ export namespace Prisma {
     id?: true
     username?: true
     email?: true
-    firstName?: true
-    lastName?: true
     password?: true
     photo?: true
   }
@@ -1182,8 +1174,6 @@ export namespace Prisma {
     id?: true
     username?: true
     email?: true
-    firstName?: true
-    lastName?: true
     password?: true
     photo?: true
   }
@@ -1192,8 +1182,6 @@ export namespace Prisma {
     id?: true
     username?: true
     email?: true
-    firstName?: true
-    lastName?: true
     password?: true
     photo?: true
     _all?: true
@@ -1289,8 +1277,6 @@ export namespace Prisma {
     id: number
     username: string
     email: string
-    firstName: string
-    lastName: string
     password: string
     photo: string | null
     _count: UserCountAggregateOutputType | null
@@ -1318,8 +1304,6 @@ export namespace Prisma {
     id?: boolean
     username?: boolean
     email?: boolean
-    firstName?: boolean
-    lastName?: boolean
     password?: boolean
     photo?: boolean
     rooms?: boolean | User$roomsArgs<ExtArgs>
@@ -1331,8 +1315,6 @@ export namespace Prisma {
     id?: boolean
     username?: boolean
     email?: boolean
-    firstName?: boolean
-    lastName?: boolean
     password?: boolean
     photo?: boolean
   }, ExtArgs["result"]["user"]>
@@ -1341,8 +1323,6 @@ export namespace Prisma {
     id?: boolean
     username?: boolean
     email?: boolean
-    firstName?: boolean
-    lastName?: boolean
     password?: boolean
     photo?: boolean
   }, ExtArgs["result"]["user"]>
@@ -1351,13 +1331,11 @@ export namespace Prisma {
     id?: boolean
     username?: boolean
     email?: boolean
-    firstName?: boolean
-    lastName?: boolean
     password?: boolean
     photo?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "firstName" | "lastName" | "password" | "photo", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "password" | "photo", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     rooms?: boolean | User$roomsArgs<ExtArgs>
     chats?: boolean | User$chatsArgs<ExtArgs>
@@ -1376,8 +1354,6 @@ export namespace Prisma {
       id: number
       username: string
       email: string
-      firstName: string
-      lastName: string
       password: string
       photo: string | null
     }, ExtArgs["result"]["user"]>
@@ -1808,8 +1784,6 @@ export namespace Prisma {
     readonly id: FieldRef<"User", 'Int'>
     readonly username: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
-    readonly firstName: FieldRef<"User", 'String'>
-    readonly lastName: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly photo: FieldRef<"User", 'String'>
   }
@@ -4492,8 +4466,6 @@ export namespace Prisma {
     id: 'id',
     username: 'username',
     email: 'email',
-    firstName: 'firstName',
-    lastName: 'lastName',
     password: 'password',
     photo: 'photo'
   };
@@ -4616,8 +4588,6 @@ export namespace Prisma {
     id?: IntFilter<"User"> | number
     username?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
-    firstName?: StringFilter<"User"> | string
-    lastName?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     photo?: StringNullableFilter<"User"> | string | null
     rooms?: RoomListRelationFilter
@@ -4628,8 +4598,6 @@ export namespace Prisma {
     id?: SortOrder
     username?: SortOrder
     email?: SortOrder
-    firstName?: SortOrder
-    lastName?: SortOrder
     password?: SortOrder
     photo?: SortOrderInput | SortOrder
     rooms?: RoomOrderByRelationAggregateInput
@@ -4643,8 +4611,6 @@ export namespace Prisma {
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
-    firstName?: StringFilter<"User"> | string
-    lastName?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     photo?: StringNullableFilter<"User"> | string | null
     rooms?: RoomListRelationFilter
@@ -4655,8 +4621,6 @@ export namespace Prisma {
     id?: SortOrder
     username?: SortOrder
     email?: SortOrder
-    firstName?: SortOrder
-    lastName?: SortOrder
     password?: SortOrder
     photo?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -4673,8 +4637,6 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"User"> | number
     username?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
-    firstName?: StringWithAggregatesFilter<"User"> | string
-    lastName?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
     photo?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
@@ -4792,8 +4754,6 @@ export namespace Prisma {
   export type UserCreateInput = {
     username: string
     email: string
-    firstName: string
-    lastName: string
     password: string
     photo?: string | null
     rooms?: RoomCreateNestedManyWithoutCreatorInput
@@ -4804,8 +4764,6 @@ export namespace Prisma {
     id?: number
     username: string
     email: string
-    firstName: string
-    lastName: string
     password: string
     photo?: string | null
     rooms?: RoomUncheckedCreateNestedManyWithoutCreatorInput
@@ -4815,8 +4773,6 @@ export namespace Prisma {
   export type UserUpdateInput = {
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     rooms?: RoomUpdateManyWithoutCreatorNestedInput
@@ -4827,8 +4783,6 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     rooms?: RoomUncheckedUpdateManyWithoutCreatorNestedInput
@@ -4839,8 +4793,6 @@ export namespace Prisma {
     id?: number
     username: string
     email: string
-    firstName: string
-    lastName: string
     password: string
     photo?: string | null
   }
@@ -4848,8 +4800,6 @@ export namespace Prisma {
   export type UserUpdateManyMutationInput = {
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     photo?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -4858,8 +4808,6 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     photo?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -5027,8 +4975,6 @@ export namespace Prisma {
     id?: SortOrder
     username?: SortOrder
     email?: SortOrder
-    firstName?: SortOrder
-    lastName?: SortOrder
     password?: SortOrder
     photo?: SortOrder
   }
@@ -5041,8 +4987,6 @@ export namespace Prisma {
     id?: SortOrder
     username?: SortOrder
     email?: SortOrder
-    firstName?: SortOrder
-    lastName?: SortOrder
     password?: SortOrder
     photo?: SortOrder
   }
@@ -5051,8 +4995,6 @@ export namespace Prisma {
     id?: SortOrder
     username?: SortOrder
     email?: SortOrder
-    firstName?: SortOrder
-    lastName?: SortOrder
     password?: SortOrder
     photo?: SortOrder
   }
@@ -5635,8 +5577,6 @@ export namespace Prisma {
   export type UserCreateWithoutRoomsInput = {
     username: string
     email: string
-    firstName: string
-    lastName: string
     password: string
     photo?: string | null
     chats?: ChatCreateNestedManyWithoutUserInput
@@ -5646,8 +5586,6 @@ export namespace Prisma {
     id?: number
     username: string
     email: string
-    firstName: string
-    lastName: string
     password: string
     photo?: string | null
     chats?: ChatUncheckedCreateNestedManyWithoutUserInput
@@ -5693,8 +5631,6 @@ export namespace Prisma {
   export type UserUpdateWithoutRoomsInput = {
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     chats?: ChatUpdateManyWithoutUserNestedInput
@@ -5704,8 +5640,6 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     chats?: ChatUncheckedUpdateManyWithoutUserNestedInput
@@ -5748,8 +5682,6 @@ export namespace Prisma {
   export type UserCreateWithoutChatsInput = {
     username: string
     email: string
-    firstName: string
-    lastName: string
     password: string
     photo?: string | null
     rooms?: RoomCreateNestedManyWithoutCreatorInput
@@ -5759,8 +5691,6 @@ export namespace Prisma {
     id?: number
     username: string
     email: string
-    firstName: string
-    lastName: string
     password: string
     photo?: string | null
     rooms?: RoomUncheckedCreateNestedManyWithoutCreatorInput
@@ -5809,8 +5739,6 @@ export namespace Prisma {
   export type UserUpdateWithoutChatsInput = {
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     rooms?: RoomUpdateManyWithoutCreatorNestedInput
@@ -5820,8 +5748,6 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     photo?: NullableStringFieldUpdateOperationsInput | string | null
     rooms?: RoomUncheckedUpdateManyWithoutCreatorNestedInput

@@ -51,15 +51,14 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
     }
 
     ClearCanvas(context, canvas, existingShapes);
-
     let clicked = false;
     let startX=0;
     let startY=0;
-    
+
     canvas.addEventListener("mousedown", (e) => {
         clicked = true;
-         startX = e.offsetX;
-         startY = e.offsetY;
+        startX = e.offsetX;
+        startY = e.offsetY;
     })
     canvas.addEventListener("mouseup", (e) => {
         clicked = false;
@@ -111,15 +110,12 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
             }),
             roomId
         }))
-
-
     })
-    canvas.addEventListener("mousemove", (e) => {
-        
+    canvas.addEventListener('mousemove', e => {
         if (clicked) {
             let width = e.offsetX - startX;
             let height = e.offsetY - startY;
-            ClearCanvas(context, canvas, existingShapes)
+            ClearCanvas(context, canvas, existingShapes)  
             context.strokeStyle = "rgba(255,255,255)";
             //@ts-ignore
             const currentTool = window.currentTool;
@@ -155,7 +151,6 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
 }
 
 function ClearCanvas(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement, existingShapes: Shape[]) {
-
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = "rgba(0,0,0)";
     context.fillRect(0, 0, canvas.width, canvas.height);

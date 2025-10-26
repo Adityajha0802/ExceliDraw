@@ -15,15 +15,13 @@ datasource db {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  username  String  @unique
-  email     String  @unique
-  firstName String
-  lastName  String
-  password  String
-  photo     String?
-  rooms     Room[]
-  chats     Chat[]
+  id       Int     @id @default(autoincrement())
+  username String  @unique
+  email    String  @unique
+  password String
+  photo    String?
+  rooms    Room[]
+  chats    Chat[]
 }
 
 model Room {
