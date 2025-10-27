@@ -34,7 +34,7 @@ export default function Home() {
 
           <Button
             children={"Sign In"}
-            className="cursor-pointer text-lg p-4 rounded-full shadow-lg hover:shadow-lg transition-all  border-2 bg-slate-900 hover:bg-slate-800 dark:bg-blue-900 dark:text-white dark:hover:text-white"
+            className="cursor-pointer text-lg p-4 rounded-full shadow-lg hover:shadow-lg transition-all  border-2 bg-slate-900 hover:bg-slate-100  dark:text-white dark:hover:text-blue-900"
           >
           </Button>
         </div>
