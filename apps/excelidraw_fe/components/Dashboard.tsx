@@ -2,7 +2,7 @@
 
 import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
-import { LoaderIcon } from "lucide-react";
+import { ArrowBigLeftDashIcon, LoaderIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export const DashboardComponent=()=>{
@@ -36,7 +36,7 @@ export const DashboardComponent=()=>{
                     <Input className="w-full rounded-md  p-2 shadow-md border border-gray-700" placeholder="slug" type="text"/>
                 </div>
                 <div>
-                    <Button className="mt-1 border border-gray-800 cursor-pointer p-3 bg-blue-700 text-white rounded-md text-md font-medium " children={"Join Room"}/>
+                    <Button className="mt-1 w-36 border border-gray-800 cursor-pointer p-3 bg-blue-700 text-white rounded-md text-md font-medium " children={"Join Room"}/>
                 </div>
                 <div className="relative flex py-6 items-center">
                 <div className="flex-grow border-t border-gray-600"></div>
