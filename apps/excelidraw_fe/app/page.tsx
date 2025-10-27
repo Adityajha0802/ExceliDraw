@@ -1,7 +1,12 @@
+"use client";
+
 import { Button } from '@repo/ui/button';
 import { PencilIcon, Sparkles } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
 
 export default function Home() {
+  const router = useRouter();
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -27,12 +32,18 @@ export default function Home() {
 
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
           <Button
+            onClick={()=>{
+              router.push("/signup")
+            }}
             children={"Sign Up"}
             className="cursor-pointer text-lg p-4 rounded-full shadow-lg hover:shadow-lg transition-all border-2 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:text-blue-900 dark:hover:text-white"
           >
           </Button>
 
           <Button
+            onClick={()=>{
+              router.push("/signin")
+            }}
             children={"Sign In"}
             className="cursor-pointer text-lg p-4 rounded-full shadow-lg hover:shadow-lg transition-all  border-2 bg-slate-900 hover:bg-slate-100  dark:text-white dark:hover:text-blue-900"
           >
