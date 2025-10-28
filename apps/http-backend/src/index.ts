@@ -106,42 +106,51 @@ app.post("/room", Middleware, async (req, res) => {
 })
 
 app.get("/chats/:roomId", async (req, res) => {
-    try{
-    const roomId = Number(req.params.roomId);
+    try {
+        const roomId = Number(req.params.roomId);
 
-    const messages = await client.chat.findMany({
-        where: {
-            roomId: roomId
-        },
-        orderBy: {
-            id: "asc"
-        },
-        take: 100
-    });
+        const messages = await client.chat.findMany({
+            where: {
+                roomId: roomId
+            },
+            orderBy: {
+                id: "asc"
+            },
+            take: 100
+        });
 
-    res.json({
-        messages
-    })
-    }catch(e){
-    
+        res.json({
+            messages
+        })
+    } catch (e) {
+
         console.log(e);
         res.json({
-            message:"Something went wrong"
+            message: "Something went wrong"
         })
     }
 })
 
-app.get("/room/:slug", async (req, res) => {
+app.get("/room/:slug", Middleware, async (req, res) => {
     const slug = req.params.slug;
+    //@ts-ignore
+    const userId = req.userId;
+    try {
+        if (userId) {
+            const room = await client.room.findFirst({
+                where: {
+                    slug: slug
+                }
+            });
 
-    const room = await client.room.findFirst({
-        where: {
-            slug: slug
+            res.json({
+                roomId: room?.id
+            })
         }
-    });
-
-    res.json({
-        room
-    })
+    }catch(e){
+        res.status(411).json({
+            message:"You are not logged in"
+        })
+    }
 })
 app.listen(3002);

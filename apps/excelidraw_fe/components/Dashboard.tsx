@@ -27,8 +27,26 @@ export const DashboardComponent=()=>{
         </div>
     }
 
-    async function createRoom(){
-        const roomName=createroomRef.current?.value;
+    async function join_room(){
+        const roomslug=joinroomRef.current?.value.trim();
+
+        const res = await axios.get(`${BACKEND_URL}/room/${roomslug}`,{
+            headers:{
+                "authorization":localStorage.getItem("token")
+            }
+        })
+
+        console.log(res);
+
+        const roomId = res.data.roomId;
+
+        router.push(`/canvas/${roomId}`);
+
+        alert(`Welcome to ${roomslug}`);
+    }
+
+    async function create_Room(){
+        const roomName=createroomRef.current?.value.trim();
 
         const res = await axios.post(`${BACKEND_URL}/room`, {
             roomName:roomName
@@ -41,13 +59,11 @@ export const DashboardComponent=()=>{
 
         console.log(res);
 
-        alert("Room has been created!");
-
         const roomId= res.data.roomId;
 
         router.push(`/canvas/${roomId}`)
 
-
+        alert(`${roomName} has been created!`);
     }
 
     return <div className="h-screen w-screen overflow-hidden">
@@ -63,10 +79,12 @@ export const DashboardComponent=()=>{
                     Enter Room Name
                 </div>
                 <div>
-                    <Input className=" mt-2 w-full rounded-md  p-2 shadow-md border border-gray-700" placeholder="slug" type="text"/>
+                    <Input className=" mt-2 w-full rounded-md  p-2 shadow-md border border-gray-700" placeholder="slug" type="text" reference={joinroomRef}/>
                 </div>
                 <div>
-                    <Button  className="mt-1 w-36 border border-gray-800 cursor-pointer p-3 bg-blue-700 text-white rounded-md text-md font-medium " children={"Join Room"}/>
+                    <Button onClick={()=>{
+                        join_room()
+                    }} className="mt-1 w-36 border border-gray-800 cursor-pointer p-3 bg-blue-700 text-white rounded-md text-md font-medium " children={"Join Room"}/>
                 </div>
                 <div className="relative flex py-6 items-center">
                 <div className="flex-grow border-t border-gray-600"></div>
@@ -83,7 +101,7 @@ export const DashboardComponent=()=>{
                 </div>
                 <div>
                     <Button onClick={()=>{
-                        createRoom()
+                        create_Room()
                     }}className="mt-1 border border-gray-800 w-full cursor-pointer p-3 bg-purple-700 text-white rounded-md text-md font-medium " children={"Create Room"}/>
                 </div>
             </div>

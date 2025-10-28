@@ -34,8 +34,8 @@ export const Auth = ({
     }
 
     async function Signin() {
-        const username = usernameRef.current?.value;
-        const password = passwordRef.current?.value;
+        const username = usernameRef.current?.value.trim();
+        const password = passwordRef.current?.value.trim();
 
         const res = await axios.post(`${BACKEND_URL}/signin`, {
             username,
@@ -53,9 +53,9 @@ export const Auth = ({
 
 
     async function Signup() {
-        const username = usernameRef.current?.value;
-        const email = emailRef.current?.value;
-        const password = passwordRef.current?.value;
+        const username = usernameRef.current?.value.trim();
+        const email = emailRef.current?.value.trim();
+        const password = passwordRef.current?.value.trim();
 
         const res =await axios.post(`${BACKEND_URL}/signup`, {
             username,
