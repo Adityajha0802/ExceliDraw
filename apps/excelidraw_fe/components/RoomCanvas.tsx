@@ -2,6 +2,7 @@
 import { WS_URL } from "@/config";
 import { useEffect, useState } from "react";
 import { Canvas } from "./Canvas";
+import { LoaderIcon } from "lucide-react";
 
 
 export  const  RoomCanvas=({roomId}:{roomId:string})=>{
@@ -22,9 +23,9 @@ export  const  RoomCanvas=({roomId}:{roomId:string})=>{
 
 
         if(!socket){
-            return <div>
-                Connecting to server...
-            </div>
+            return <div className="h-screen w-screen flex justify-center items-center ">
+            <LoaderIcon size={36} />
+        </div>
         }
         return <div>
             <Canvas socket={socket} roomId={roomId}/>

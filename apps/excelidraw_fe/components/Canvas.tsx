@@ -2,21 +2,21 @@
 import { InitDraw } from "@/Draw";
 import { useEffect, useRef, useState } from "react"
 
-import {  Circle, RectangleHorizontalIcon, SlashIcon} from "lucide-react";
+import { Circle, RectangleHorizontalIcon, SlashIcon } from "lucide-react";
 import { Icon } from "./Icons";
 
-type shape="rectangle"|"circle"|"line"|"text";
+type shape = "rectangle" | "circle" | "line";
 export function Canvas({ roomId, socket }: {
     roomId: string,
     socket: WebSocket
 }) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [currentTool,setCurrentTool]=useState<shape>("circle");
+    const [currentTool, setCurrentTool] = useState<shape>("circle");
 
-    useEffect(()=>{
+    useEffect(() => {
         //@ts-ignore
-        window.currentTool=currentTool;
-    },[currentTool])
+        window.currentTool = currentTool;
+    }, [currentTool])
 
 
     useEffect(() => {
@@ -28,29 +28,28 @@ export function Canvas({ roomId, socket }: {
     }, [canvasRef])
 
     return <div style={{
-        height:"100vh",
-        overflow:"hidden",
+        height: "100vh",
+        overflow: "hidden",
     }}>
-       
-        <ToolBar currentTool={currentTool} setCurrentTool={setCurrentTool}/>
-        <canvas className="cursor-crosshair"ref={canvasRef}></canvas>
+        <ToolBar currentTool={currentTool} setCurrentTool={setCurrentTool} />
+        <canvas className="cursor-crosshair" ref={canvasRef}></canvas>
     </div>
 
 }
 
-function ToolBar({currentTool,setCurrentTool}:{
-    currentTool:shape,
-    setCurrentTool:(s:shape)=>void
-}){
+function ToolBar({ currentTool, setCurrentTool }: {
+    currentTool: shape,
+    setCurrentTool: (s: shape) => void
+}) {
     return <div className="m-1 flex justify-center">
-        <Icon icon={<Circle/>} onClick={()=>{
-            setCurrentTool("circle") 
-        }} activated={currentTool==="circle"}/>
-        <Icon icon={<RectangleHorizontalIcon/>} onClick={()=>{
-            setCurrentTool("rectangle") 
-        }} activated={currentTool==="rectangle"}/>
-        <Icon icon={<SlashIcon/>} onClick={()=>{
-            setCurrentTool("line") 
-        }} activated={currentTool==="line"}/>
+        <Icon icon={<Circle />} onClick={() => {
+            setCurrentTool("circle")
+        }} activated={currentTool === "circle"} />
+        <Icon icon={<RectangleHorizontalIcon />} onClick={() => {
+            setCurrentTool("rectangle")
+        }} activated={currentTool === "rectangle"} />
+        <Icon icon={<SlashIcon />} onClick={() => {
+            setCurrentTool("line")
+        }} activated={currentTool === "line"} />
     </div>
 }
