@@ -2,10 +2,10 @@
 import { InitDraw } from "@/Draw";
 import { useEffect, useRef, useState } from "react"
 
-import {  Circle, EraserIcon, Hand, RectangleHorizontalIcon, SlashIcon,  TextIcon} from "lucide-react";
+import {  Circle, RectangleHorizontalIcon, SlashIcon} from "lucide-react";
 import { Icon } from "./Icons";
 
-type shape="rectangle"|"circle"|"line"|"text"|"panning";
+type shape="rectangle"|"circle"|"line"|"text";
 export function Canvas({ roomId, socket }: {
     roomId: string,
     socket: WebSocket

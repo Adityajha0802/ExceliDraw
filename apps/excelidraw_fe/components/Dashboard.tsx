@@ -1,13 +1,21 @@
 "use client";
 
+import { BACKEND_URL } from "@/config";
 import { Button } from "@repo/ui/button";
 import { Input } from "@repo/ui/input";
+import axios from "axios";
 import { ArrowBigLeftDashIcon, LoaderIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 export const DashboardComponent=()=>{
     const [mounted,setMounted]=useState(false);
     const [loading,setLoading]=useState(true);
+
+    const router = useRouter();
+
+    const joinroomRef = useRef<HTMLInputElement>(null);
+    const createroomRef = useRef<HTMLInputElement>(null)
     useEffect(()=>{
         setMounted(true);
         setLoading(false)
@@ -19,6 +27,28 @@ export const DashboardComponent=()=>{
         </div>
     }
 
+    async function createRoom(){
+        const roomName=createroomRef.current?.value;
+
+        const res = await axios.post(`${BACKEND_URL}/room`, {
+            roomName:roomName
+        },
+            {
+                headers: {
+                    "authorization":localStorage.getItem("token")
+                }
+        }) 
+
+        console.log(res);
+
+        alert("Room has been created!");
+
+        const roomId= res.data.roomId;
+
+        router.push(`/canvas/${roomId}`)
+
+
+    }
 
     return <div className="h-screen w-screen overflow-hidden">
             <div className="flex justify-center mt-8 font-bold text-white text-4xl italic ">
@@ -36,7 +66,7 @@ export const DashboardComponent=()=>{
                     <Input className=" mt-2 w-full rounded-md  p-2 shadow-md border border-gray-700" placeholder="slug" type="text"/>
                 </div>
                 <div>
-                    <Button className="mt-1 w-36 border border-gray-800 cursor-pointer p-3 bg-blue-700 text-white rounded-md text-md font-medium " children={"Join Room"}/>
+                    <Button  className="mt-1 w-36 border border-gray-800 cursor-pointer p-3 bg-blue-700 text-white rounded-md text-md font-medium " children={"Join Room"}/>
                 </div>
                 <div className="relative flex py-6 items-center">
                 <div className="flex-grow border-t border-gray-600"></div>
@@ -49,10 +79,12 @@ export const DashboardComponent=()=>{
                     Create New Room
                 </div>
                 <div>
-                    <Input className="w-full rounded-md mt-2  p-2 shadow-md border border-gray-700" placeholder="Enter room name" type="text"/>
+                    <Input className="w-full rounded-md mt-2  p-2 shadow-md border border-gray-700" placeholder="Enter room name" reference={createroomRef}type="text"/>
                 </div>
                 <div>
-                    <Button className="mt-1 border border-gray-800 w-full cursor-pointer p-3 bg-purple-700 text-white rounded-md text-md font-medium " children={"Create Room"}/>
+                    <Button onClick={()=>{
+                        createRoom()
+                    }}className="mt-1 border border-gray-800 w-full cursor-pointer p-3 bg-purple-700 text-white rounded-md text-md font-medium " children={"Create Room"}/>
                 </div>
             </div>
             </div>

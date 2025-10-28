@@ -88,7 +88,7 @@ app.post("/room", Middleware, async (req, res) => {
 
         const room = await client.room.create({
             data: {
-                slug: parsedData.data.name,
+                slug: parsedData.data.roomName,
                 creatorId: userId
             }
         })
