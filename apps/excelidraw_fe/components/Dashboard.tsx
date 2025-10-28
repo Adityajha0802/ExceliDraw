@@ -33,7 +33,7 @@ export const DashboardComponent=()=>{
                     Enter Room Name
                 </div>
                 <div>
-                    <Input className="w-full rounded-md  p-2 shadow-md border border-gray-700" placeholder="slug" type="text"/>
+                    <Input className=" mt-2 w-full rounded-md  p-2 shadow-md border border-gray-700" placeholder="slug" type="text"/>
                 </div>
                 <div>
                     <Button className="mt-1 w-36 border border-gray-800 cursor-pointer p-3 bg-blue-700 text-white rounded-md text-md font-medium " children={"Join Room"}/>
@@ -49,7 +49,7 @@ export const DashboardComponent=()=>{
                     Create New Room
                 </div>
                 <div>
-                    <Input className="w-full rounded-md  p-2 shadow-md border border-gray-700" placeholder="Enter room name" type="text"/>
+                    <Input className="w-full rounded-md mt-2  p-2 shadow-md border border-gray-700" placeholder="Enter room name" type="text"/>
                 </div>
                 <div>
                     <Button className="mt-1 border border-gray-800 w-full cursor-pointer p-3 bg-purple-700 text-white rounded-md text-md font-medium " children={"Create Room"}/>

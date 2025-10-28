@@ -22,8 +22,8 @@ app.post("/signup", async (req, res) => {
     try {
         await client.user.create({
             data: {
-                username: parsedData.data?.username,
-                email: parsedData.data?.email,
+                username: parsedData.data.username,
+                email: parsedData.data.email,
                 password: parsedData.data.password
             }
         })
