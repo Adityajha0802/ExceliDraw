@@ -30,6 +30,7 @@ type Shape = {
 export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket: WebSocket) {
     const context = canvas.getContext("2d");
 
+    let zoom: number = 1;
     const existingShapes: Shape[] = await getExistingShapes(roomId);
     if (!context) {
         return;
@@ -40,7 +41,7 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
         if (data.type == "chat") {
             const parsedShape = JSON.parse(data.message);
             existingShapes.push(parsedShape.shape);
-            ClearCanvas(context, canvas, existingShapes);
+            ClearCanvas(context, canvas, existingShapes, zoom);
         }
 
     }
@@ -51,23 +52,39 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
         e.preventDefault();
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        ClearCanvas(context, canvas, existingShapes);
+        ClearCanvas(context, canvas, existingShapes, zoom);
     }
 
-    ClearCanvas(context, canvas, existingShapes);
+    ClearCanvas(context, canvas, existingShapes, zoom);
     let clicked = false;
     let startX = 0;
     let startY = 0;
 
+    function getmouse(e: MouseEvent) {
+        const x = e.offsetX *zoom ;
+        const y = e.offsetY *zoom;
+        return { x, y };
+    }
+
+    canvas.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const direction = Math.sign(e.deltaY);
+        const step = 0.1;
+        zoom += direction * step;
+        zoom = Math.max(0, Math.min(5, zoom));
+        ClearCanvas(context, canvas, existingShapes, zoom);
+        console.log(zoom);
+    })
+
     canvas.addEventListener("mousedown", (e) => {
         clicked = true;
-        startX = e.offsetX;
-        startY = e.offsetY;
+        startX = getmouse(e).x;
+        startY = getmouse(e).y;
     })
     canvas.addEventListener("mouseup", (e) => {
         clicked = false;
-        const width = e.offsetX - startX;
-        const height = e.offsetY - startY;
+        const width = getmouse(e).x - startX;
+        const height = getmouse(e).y - startY;
 
         let shape: Shape | null = null;
         //@ts-ignore
@@ -94,16 +111,16 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
                 type: "line",
                 X: startX,
                 Y: startY,
-                endX: e.offsetX,
-                endY: e.offsetY
+                endX: getmouse(e).x,
+                endY: getmouse(e).y
             }
         } else if (currentTool == "arrow") {
             shape = {
                 type: "arrow",
                 fromX: startX,
                 fromY: startY,
-                toX: e.offsetX,
-                toY: e.offsetY
+                toX: getmouse(e).x,
+                toY: getmouse(e).y
             }
         }
         if (!shape) {
@@ -111,6 +128,7 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
         }
         try {
             existingShapes.push(shape);
+            ClearCanvas(context, canvas, existingShapes, zoom)
         } catch (e) {
             console.log(e);
         }
@@ -125,10 +143,15 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
     })
     canvas.addEventListener('mousemove', e => {
         if (clicked) {
-            let width = e.offsetX - startX;
-            let height = e.offsetY - startY;
-            ClearCanvas(context, canvas, existingShapes)
+            let width =  getmouse(e).x - startX;
+            let height =  getmouse(e).y - startY;
+
+            ClearCanvas(context, canvas, existingShapes, zoom)
             context.strokeStyle = "rgba(255,255,255)";
+
+            context.save();
+            context.scale(1/zoom,1/zoom);
+
             //@ts-ignore
             const currentTool = window.currentTool;
             if (currentTool == "rectangle") {
@@ -148,19 +171,19 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
             else if (currentTool == "line") {
                 const X = startX;
                 const Y = startY;
-                const endX = e.offsetX;
-                const endY = e.offsetY;
+                const endX = getmouse(e).x;
+                const endY = getmouse(e).y;
                 context.beginPath();
                 context.moveTo(X, Y);
                 context.lineTo(endX, endY);
                 context.stroke();
             }
             else if (currentTool == "arrow") {
-                
+
                 const fromX = startX;
                 const fromY = startY;
-                const toX = e.offsetX;
-                const toY = e.offsetY;
+                const toX = getmouse(e).x;
+                const toY = getmouse(e).y;
                 var headlen = 20;
                 var dx = toX - fromX;
                 var dy = toY - fromY;
@@ -168,13 +191,15 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
                 context.beginPath()
                 context.moveTo(fromX, fromY);
                 context.lineTo(toX, toY);
-                context.lineTo(toX - headlen * Math.cos(angle - Math.PI / 8), toY - headlen * Math.sin(angle - Math.PI / 8));
+                context.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
                 context.moveTo(toX, toY);
-                context.lineTo(toX - headlen * Math.cos(angle + Math.PI / 8), toY - headlen * Math.sin(angle + Math.PI / 8));
+                context.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
                 context.stroke();
             }
+
+            context.restore();
         }
-        
+
     }
 
     )
@@ -182,10 +207,12 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
 
 
 
-function ClearCanvas(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement, existingShapes: Shape[]) {
+function ClearCanvas(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement, existingShapes: Shape[], zoom: number) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = "rgba(0,0,0)";
     context.fillRect(0, 0, canvas.width, canvas.height);
+    context.save();
+    context.scale(1/zoom,1/zoom);
 
     existingShapes?.map((shape) => {
         if (shape?.type == "rect") {
@@ -205,20 +232,23 @@ function ClearCanvas(context: CanvasRenderingContext2D, canvas: HTMLCanvasElemen
 
         } else if (shape?.type == "arrow") {
             var headlen = 20; // length of head in pixels
-                var dx = shape.toX - shape.fromX;
-                var dy = shape.toY - shape.fromY;
-                var angle = Math.atan2(dy, dx);
-                context.beginPath()
-                context.moveTo(shape.fromX, shape.fromY);
-                context.lineTo(shape.toX, shape.toY);
-                context.lineTo(shape.toX - headlen * Math.cos(angle - Math.PI / 8), shape.toY - headlen * Math.sin(angle - Math.PI / 8));
-                context.moveTo(shape.toX, shape.toY);
-                context.lineTo(shape.toX - headlen * Math.cos(angle + Math.PI / 8), shape.toY - headlen * Math.sin(angle + Math.PI / 8));
-                context.stroke();
+            var dx = shape.toX - shape.fromX;
+            var dy = shape.toY - shape.fromY;
+            var angle = Math.atan2(dy, dx);
+            context.beginPath()
+            context.moveTo(shape.fromX, shape.fromY);
+            context.lineTo(shape.toX, shape.toY);
+            context.lineTo(shape.toX - headlen * Math.cos(angle - Math.PI / 6), shape.toY - headlen * Math.sin(angle - Math.PI / 6));
+            context.moveTo(shape.toX, shape.toY);
+            context.lineTo(shape.toX - headlen * Math.cos(angle + Math.PI / 6), shape.toY - headlen * Math.sin(angle + Math.PI / 6));
+            context.stroke();
 
+    
         }
 
     })
+
+    context.restore();
 
 }
 
