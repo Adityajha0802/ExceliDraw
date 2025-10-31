@@ -84,8 +84,8 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
     let startY = 0;
 
     function getmouse(e: MouseEvent) {
-        const x = e.offsetX * zoom;
-        const y = e.offsetY * zoom;
+        const x = (e.offsetX - center.x) *zoom - offset.x;
+        const y = (e.offsetY- center.y) *zoom - offset.y;
         return { x, y };
     }
 
@@ -127,10 +127,9 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
         //@ts-ignore
         const currentTool = window.currentTool;
         if (currentTool == "panning") {
-            if (e.button == 1) {
                 drag.start = getmouse(e);
                 drag.active = true;
-            }
+            
         }
     })
     canvas.addEventListener("mouseup", (e) => {
@@ -216,7 +215,11 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
             context.strokeStyle = "rgba(255,255,255)";
 
             context.save();
+            context.translate(center.x, center.y);
             context.scale(1 / zoom, 1 / zoom);
+            const offsett = getoffset();
+            context.translate(offsett.x, offsett.y)
+
             if (currentTool == "panning") {
                 if (drag.active) {
                     drag.end = getmouse(e);
