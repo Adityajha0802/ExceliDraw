@@ -2,10 +2,10 @@
 import { InitDraw } from "@/Draw";
 import { useEffect, useRef, useState } from "react"
 
-import { ArrowBigDown, ArrowBigDownDashIcon, ArrowLeftCircle, ArrowRight, Circle, Eraser, LetterText, MoveRight, RectangleHorizontalIcon, SlashIcon, Text } from "lucide-react";
+import { ArrowBigDown, ArrowBigDownDashIcon, ArrowLeftCircle, ArrowRight, Circle, Eraser, Hand, LetterText, MoveRight, RectangleHorizontalIcon, SlashIcon, Text } from "lucide-react";
 import { Icon } from "./Icons";
 
-type shape = "rectangle" | "circle" | "line" | "arrow" ;
+type shape = "rectangle" | "circle" | "line" | "arrow" | "panning";
 export function Canvas({ roomId, socket }: {
     roomId: string,
     socket: WebSocket
@@ -54,5 +54,8 @@ function ToolBar({ currentTool, setCurrentTool }: {
         <Icon icon={<ArrowRight/>} onClick={() => {
             setCurrentTool("arrow")
         }} activated={currentTool === "arrow"} />
+        <Icon icon={<Hand/>} onClick={() => {
+            setCurrentTool("panning")
+        }} activated={currentTool === "panning"} />
     </div>
 }

@@ -26,11 +26,34 @@ type Shape = {
     toY: number
 }
 
+type point = { x: number, y: number };
 
+function subtract(p1: point, p2: point): point {
+    return { x: ((p2.x) - (p1.x)), y: ((p2.y) - (p1.y)) };
+}
+
+function add(p1: point, p2: point): point {
+    return { x: ((p2.x) + (p1.x)), y: ((p2.y) + (p1.y)) };
+}
+
+function scaling(p1: point, n: number): point {
+    return { x: (p1.x) * n, y: (p1.y) * n };
+}
 export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket: WebSocket) {
     const context = canvas.getContext("2d");
 
     let zoom: number = 1;
+
+    const center: point = { x: canvas.width / 2, y: canvas.height / 2 }
+
+    let offset: point = scaling(center,-1);
+
+    let drag = {
+        start: { x: 0, y: 0 } as point,
+        end: { x: 0, y: 0 } as point,
+        offset: { x: 0, y: 0 } as point,
+        active: false
+    }
     const existingShapes: Shape[] = await getExistingShapes(roomId);
     if (!context) {
         return;
@@ -41,7 +64,7 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
         if (data.type == "chat") {
             const parsedShape = JSON.parse(data.message);
             existingShapes.push(parsedShape.shape);
-            ClearCanvas(context, canvas, existingShapes, zoom);
+            ClearCanvas(context, canvas, existingShapes, zoom, offset, getoffset, center);
         }
 
     }
@@ -52,27 +75,48 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
         e.preventDefault();
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        ClearCanvas(context, canvas, existingShapes, zoom);
+        ClearCanvas(context, canvas, existingShapes, zoom, offset, getoffset, center);
     }
 
-    ClearCanvas(context, canvas, existingShapes, zoom);
+    ClearCanvas(context, canvas, existingShapes, zoom, offset, getoffset, center);
     let clicked = false;
     let startX = 0;
     let startY = 0;
 
     function getmouse(e: MouseEvent) {
-        const x = e.offsetX *zoom ;
-        const y = e.offsetY *zoom;
+        const x = e.offsetX * zoom;
+        const y = e.offsetY * zoom;
         return { x, y };
+    }
+
+    function getoffset(): point {
+        return add(offset, drag.offset)
     }
 
     canvas.addEventListener("wheel", (e) => {
         e.preventDefault();
         const direction = Math.sign(e.deltaY);
         const step = 0.1;
+        const oldZoom = zoom;
         zoom += direction * step;
-        zoom = Math.max(0, Math.min(5, zoom));
-        ClearCanvas(context, canvas, existingShapes, zoom);
+        zoom = Math.max(1, Math.min(5, zoom));
+        // Calculate mouse position relative to canvas
+        const mouseX = e.offsetX;
+        const mouseY = e.offsetY;
+
+        // Calculate the world position under the mouse before zoom
+        const currentOffset = getoffset();
+        const worldX = (mouseX - center.x) * oldZoom - currentOffset.x;
+        const worldY = (mouseY - center.y) * oldZoom - currentOffset.y;
+
+        // Calculate the world position under the mouse after zoom
+        const newWorldX = (mouseX - center.x) * zoom - currentOffset.x;
+        const newWorldY = (mouseY - center.y) * zoom - currentOffset.y;
+
+        // Adjust offset to keep the same world point under the mouse
+        offset.x += newWorldX - worldX;
+        offset.y += newWorldY - worldY;
+        ClearCanvas(context, canvas, existingShapes, zoom, offset, getoffset, center);
         console.log(zoom);
     })
 
@@ -80,6 +124,14 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
         clicked = true;
         startX = getmouse(e).x;
         startY = getmouse(e).y;
+        //@ts-ignore
+        const currentTool = window.currentTool;
+        if (currentTool == "panning") {
+            if (e.button == 1) {
+                drag.start = getmouse(e);
+                drag.active = true;
+            }
+        }
     })
     canvas.addEventListener("mouseup", (e) => {
         clicked = false;
@@ -123,12 +175,23 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
                 toY: getmouse(e).y
             }
         }
+        else if (currentTool == "panning") {
+            if (drag.active) {
+                offset = add(offset, drag.offset);
+                drag = {
+                    start: { x: 0, y: 0 } as point,
+                    end: { x: 0, y: 0 } as point,
+                    offset: { x: 0, y: 0 } as point,
+                    active: false
+                }
+            }
+        }
         if (!shape) {
             return
         }
         try {
             existingShapes.push(shape);
-            ClearCanvas(context, canvas, existingShapes, zoom)
+            ClearCanvas(context, canvas, existingShapes, zoom, offset, getoffset, center);
         } catch (e) {
             console.log(e);
         }
@@ -141,19 +204,26 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
             roomId
         }))
     })
-    canvas.addEventListener('mousemove', e => {
-        if (clicked) {
-            let width =  getmouse(e).x - startX;
-            let height =  getmouse(e).y - startY;
 
-            ClearCanvas(context, canvas, existingShapes, zoom)
+    canvas.addEventListener('mousemove', e => {
+        //@ts-ignore
+        const currentTool = window.currentTool;
+        if (clicked) {
+            let width = getmouse(e).x - startX;
+            let height = getmouse(e).y - startY;
+
+            ClearCanvas(context, canvas, existingShapes, zoom, offset, getoffset, center)
             context.strokeStyle = "rgba(255,255,255)";
 
             context.save();
-            context.scale(1/zoom,1/zoom);
+            context.scale(1 / zoom, 1 / zoom);
+            if (currentTool == "panning") {
+                if (drag.active) {
+                    drag.end = getmouse(e);
+                    drag.offset = subtract(drag.end, drag.start);
+                }
+            }
 
-            //@ts-ignore
-            const currentTool = window.currentTool;
             if (currentTool == "rectangle") {
                 context.strokeRect(startX, startY, width, height);
 
@@ -207,12 +277,15 @@ export async function InitDraw(canvas: HTMLCanvasElement, roomId: string, socket
 
 
 
-function ClearCanvas(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement, existingShapes: Shape[], zoom: number) {
+function ClearCanvas(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement, existingShapes: Shape[], zoom: number, offset: point, getoffset: () => point, center: point) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = "rgba(0,0,0)";
     context.fillRect(0, 0, canvas.width, canvas.height);
     context.save();
-    context.scale(1/zoom,1/zoom);
+    context.translate(center.x, center.y);
+    context.scale(1 / zoom, 1 / zoom);
+    const offsett = getoffset();
+    context.translate(offsett.x, offsett.y)
 
     existingShapes?.map((shape) => {
         if (shape?.type == "rect") {
@@ -243,7 +316,7 @@ function ClearCanvas(context: CanvasRenderingContext2D, canvas: HTMLCanvasElemen
             context.lineTo(shape.toX - headlen * Math.cos(angle + Math.PI / 6), shape.toY - headlen * Math.sin(angle + Math.PI / 6));
             context.stroke();
 
-    
+
         }
 
     })
