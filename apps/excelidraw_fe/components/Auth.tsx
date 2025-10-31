@@ -7,6 +7,8 @@ import { LoaderIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { BACKEND_URL } from "@/config";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const Auth = ({
     isSignin
@@ -37,18 +39,21 @@ export const Auth = ({
         const username = usernameRef.current?.value.trim();
         const password = passwordRef.current?.value.trim();
 
-        const res = await axios.post(`${BACKEND_URL}/signin`, {
-            username,
-            password
-        })
+        try {
+            const res = await axios.post(`${BACKEND_URL}/signin`, {
+                username,
+                password
+            })
 
-        const jwt = res.data.token;
-        localStorage.setItem("token", jwt)
-        console.log(res);
+            const jwt = res.data.token;
+            localStorage.setItem("token", jwt)
+            console.log(res);
 
-        router.push("/dashboard")
-
-        alert("You are logged in !!");
+            toast.success("You are logged in !");
+            router.push("/dashboard")
+        } catch (e) {
+            toast.error("Invalid usename or password !")
+        }
     }
 
 
@@ -57,22 +62,38 @@ export const Auth = ({
         const email = emailRef.current?.value.trim();
         const password = passwordRef.current?.value.trim();
 
-        const res =await axios.post(`${BACKEND_URL}/signup`, {
-            username,
-            email,
-            password
-        })
+        try {
+            const res = await axios.post(`${BACKEND_URL}/signup`, {
+                username,
+                email,
+                password
+            })
 
-        console.log(res);
+            console.log(res);
 
-        router.push("/signin")
+            toast.success("Your account has been created successfully!")
+            router.push("/signin")
 
-        alert("Your account has been created successfully !!");
+        } catch (e) {
+            toast.error("Incorrect credentials!")
+        }
+
+
     }
 
 
 
     return <div className="h-screen w-screen flex justify-center items-center">
+        <ToastContainer position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark" />
         <div className="rounded-lg p-6 min-h-80 min-w-80 shadow-lg bg-white">
             <div className="text-blue-800 flex justify-center m-2  text-4xl italic font-semibold">
                 {isSignin ? "Sign In" : "Sign Up"}
