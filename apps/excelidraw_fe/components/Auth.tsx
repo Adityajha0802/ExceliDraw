@@ -51,7 +51,7 @@ export const Auth = ({
 
             router.push("/dashboard")
             toast.success("You are logged in !");
-            
+
         } catch (e) {
             toast.error("Invalid usename or password !")
         }
@@ -85,7 +85,7 @@ export const Auth = ({
 
 
 
-    return <div className="h-screen w-screen flex justify-center items-center">
+    return <div className="bg-slate-900 h-screen w-screen overflow-hidden ">
         <ToastContainer position="top-center"
             autoClose={5000}
             hideProgressBar={false}
@@ -96,12 +96,17 @@ export const Auth = ({
             draggable
             pauseOnHover
             theme="dark" />
-        <div className="rounded-lg p-6 min-h-80 min-w-80 shadow-lg bg-white">
-            <div className="text-blue-800 flex justify-center m-2  text-4xl italic font-semibold">
-                {isSignin ? "Sign In" : "Sign Up"}
-            </div>
-            <div className="text-black flex justify-center items-center m-2  text-sm">
+        <div className="flex justify-center mt-8 font-bold text-white text-4xl italic ">
+            {isSignin?"Welcome Back !":"Welcome to Collaborative Draw application"}
+        </div>
+
+        <div className="text-blue-800 flex justify-center items-center m-2  text-2xl">
                 {isSignin ? "Enter your credentials to access your account" : "Create your account"}
+            </div>
+        <div className="flex justify-center items-center">
+        <div className="mt-16 rounded-lg p-6 min-h-72 min-w-80 shadow-lg bg-white">
+            <div className="text-blue-900 flex justify-center m-2  text-4xl italic font-semibold">
+                {isSignin ? "Sign In" : "Sign Up"}
             </div>
             <div>
                 <Input className="p-2 m-1 placeholder-gray-500 text-black border border-gray-200 w-full rounded-md shadow-md " reference={usernameRef} placeholder="username" type="text" />
@@ -117,8 +122,9 @@ export const Auth = ({
             <div >
                 <Button onClick={() => {
                     { isSignin ? Signin() : Signup() }
-                }} className="text-lg p-3 m-1 mt-2 bg-blue-600 text-white  w-full rounded-md font-normal cursor-pointer border border-gray-600 shadow-lg" children={isSignin ? "Sign In" : "Sign Up"} />
+                }} className="text-lg p-3 m-1 mt-3 bg-blue-700 text-white  w-full rounded-md font-normal cursor-pointer border border-gray-600 shadow-lg" children={isSignin ? "Sign In" : "Sign Up"} />
             </div>
+        </div>
         </div>
     </div>
 }

@@ -72,11 +72,11 @@ export const DashboardComponent = () => {
             toast.success(`${roomName} has been created!`);
 
         } catch (e) {
-            toast.error("something went wrong !");
+            toast.error("Room already exists!");
         }
     }
 
-    return <div className="h-screen w-screen overflow-hidden">
+    return <div className="bg-slate-900 h-screen w-screen overflow-hidden">
         <ToastContainer position="top-center"
             autoClose={5000}
             hideProgressBar={false}
