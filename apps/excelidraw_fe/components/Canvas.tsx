@@ -1,28 +1,33 @@
 "use client";
-import { InitDraw } from "@/Draw";
+
 import { useEffect, useRef, useState } from "react"
-
-import { ArrowBigDown, ArrowBigDownDashIcon, ArrowLeftCircle, ArrowRight, Circle, Eraser, Hand, LetterText, MoveRight, RectangleHorizontalIcon, SlashIcon, Text } from "lucide-react";
+import {  ArrowRight, Circle, Hand, RectangleHorizontalIcon, SlashIcon } from "lucide-react";
 import { Icon } from "./Icons";
+import { Draw } from "@/Draw/Draw";
 
-type shape = "rectangle" | "circle" | "line" | "arrow" | "panning";
+export type Tool = "rectangle" | "circle" | "line" | "arrow" | "panning";
 export function Canvas({ roomId, socket }: {
     roomId: string,
     socket: WebSocket
 }) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [currentTool, setCurrentTool] = useState<shape>("circle");
+    const [draw,setDraw]=useState<Draw>()
+    const [currentTool, setCurrentTool] = useState<Tool>("circle");
 
     useEffect(() => {
-        //@ts-ignore
-        window.currentTool = currentTool;
-    }, [currentTool])
+        draw?.setTool(currentTool);
+    }, [currentTool,draw])
 
 
     useEffect(() => {
         if (canvasRef.current) {
             const canvas = canvasRef.current;
-            InitDraw(canvas, roomId, socket);
+            const d = new Draw(canvas,roomId,socket);
+            setDraw(d);
+
+            return ()=>{
+                d.destroy();
+            }
         }
 
     }, [canvasRef])
@@ -38,8 +43,8 @@ export function Canvas({ roomId, socket }: {
 }
 
 function ToolBar({ currentTool, setCurrentTool }: {
-    currentTool: shape,
-    setCurrentTool: (s: shape) => void
+    currentTool: Tool,
+    setCurrentTool: (s: Tool) => void
 }) {
     return <div className="m-1 flex justify-center text-allign">
         <Icon icon={<Circle />} onClick={() => {

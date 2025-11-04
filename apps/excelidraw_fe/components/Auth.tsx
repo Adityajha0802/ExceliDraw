@@ -49,8 +49,9 @@ export const Auth = ({
             localStorage.setItem("token", jwt)
             console.log(res);
 
-            toast.success("You are logged in !");
             router.push("/dashboard")
+            toast.success("You are logged in !");
+            
         } catch (e) {
             toast.error("Invalid usename or password !")
         }
@@ -71,8 +72,9 @@ export const Auth = ({
 
             console.log(res);
 
-            toast.success("Your account has been created successfully!")
             router.push("/signin")
+            toast.success("Your account has been created successfully!")
+
 
         } catch (e) {
             toast.error("Incorrect credentials!")

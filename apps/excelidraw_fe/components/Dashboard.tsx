@@ -43,8 +43,8 @@ export const DashboardComponent = () => {
 
             const roomId = res.data.roomId;
 
-            toast.success(`Welcome to ${roomslug}`);
             router.push(`/canvas/${roomId}`);
+            toast.success(`Welcome to ${roomslug}`);
 
         } catch (e) {
             toast.error("something went wrong !");
@@ -68,8 +68,8 @@ export const DashboardComponent = () => {
 
             const roomId = res.data.roomId;
             
-            toast.success(`${roomName} has been created!`);
             router.push(`/canvas/${roomId}`)
+            toast.success(`${roomName} has been created!`);
 
         } catch (e) {
             toast.error("something went wrong !");
