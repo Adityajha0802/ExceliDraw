@@ -4,9 +4,10 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "db:generate":"cd packages/db && npx prisma generate && cd ../..",
+    "start:http-backend":"cd apps/http-backend && pnpm run start",
+    "start:ws-backend":"cd apps/ws-backend && pnpm run start",
+    "start:frontend":"cd apps/excelidraw_fe && pnpm run start"
   },
   "devDependencies": {
     "prettier": "^3.6.2",
