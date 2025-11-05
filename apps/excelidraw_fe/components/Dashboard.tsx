@@ -32,24 +32,26 @@ export const DashboardComponent = () => {
     async function join_room() {
         const roomslug = joinroomRef.current?.value.trim();
 
-        try {
-            const res = await axios.get(`${BACKEND_URL}/room/${roomslug}`, {
-                headers: {
-                    "authorization": localStorage.getItem("token")
-                }
-            })
+        const res = await axios.get(`${BACKEND_URL}/room/${roomslug}`, {
+            headers: {
+                "authorization": localStorage.getItem("token")
+            }
+        })
 
-            console.log(res);
+        console.log(res);
 
-            const roomId = res.data.roomId;
+        const roomId = res.data.roomId;
 
-            router.push(`/canvas/${roomId}`);
-            toast.success(`Welcome to ${roomslug}`);
-
-        } catch (e) {
-            toast.error("Room doesnot exists!");
+        if (roomId == undefined) {
+            toast.error("Room doesnot exist!");
+            return;
         }
+
+        toast.success(`Welcome to ${roomslug}`);
+        router.push(`/canvas/${roomId}`);
+
     }
+
 
     async function create_Room() {
         const roomName = createroomRef.current?.value.trim();
@@ -67,9 +69,9 @@ export const DashboardComponent = () => {
             console.log(res);
 
             const roomId = res.data.roomId;
-            
-            router.push(`/canvas/${roomId}`)
+
             toast.success(`${roomName} has been created!`);
+            router.push(`/canvas/${roomId}`)
 
         } catch (e) {
             toast.error("Room already exists!");
