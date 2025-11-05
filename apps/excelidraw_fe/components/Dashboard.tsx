@@ -47,7 +47,7 @@ export const DashboardComponent = () => {
             toast.success(`Welcome to ${roomslug}`);
 
         } catch (e) {
-            toast.error("something went wrong !");
+            toast.error("Room doesnot exists!");
         }
     }
 
