@@ -17,6 +17,8 @@ COPY  ./apps/http-backend  ./apps/http-backend
 RUN pnpm install
 RUN pnpm run db:generate
 
+RUN pnpm run build
+
 EXPOSE 3002
 
 CMD ["pnpm", "run" , "start:http-backend"]
