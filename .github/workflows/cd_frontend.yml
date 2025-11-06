@@ -23,4 +23,4 @@ jobs:
           --build-arg:
             DATABASE_URL=${{ secrets.DATABASE_URL }}
           push: true
-          tags: adityajha02/Draw-app-frontend:${{ github.sha }}
+          tags: adityajha02/draw-app-frontend:${{ github.sha }}
