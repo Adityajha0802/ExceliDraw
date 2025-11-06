@@ -9,6 +9,10 @@ const app = express();
 app.use(express.json())
 app.use(cors());
 
+app.get("/healthcheck", async (req, res) => {
+    res.send("All Okay!");
+})
+
 app.post("/signup", async (req, res) => {
 
     const parsedData = CreateUserSchema.safeParse(req.body);
@@ -147,9 +151,9 @@ app.get("/room/:slug", Middleware, async (req, res) => {
                 roomId: room?.id
             })
         }
-    }catch(e){
+    } catch (e) {
         res.status(411).json({
-            message:"You are not logged in"
+            message: "You are not logged in"
         })
     }
 })
