@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from '@repo/ui/button';
-import { PencilIcon, Sparkles } from 'lucide-react';
+import { PencilIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 

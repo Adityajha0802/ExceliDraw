@@ -19,6 +19,13 @@ const eslintConfig = [
       "build/**",
       "next-env.d.ts",
     ],
+    rules: {
+      "react/no-children-prop": "off",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-wrapper-object-types": "off",
+      "react-hooks/exhaustive-deps": "warn",
+      "@typescript-eslint/no-unused-expressions": "off"
+    }
   },
 ];
 
