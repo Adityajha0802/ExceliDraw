@@ -27,4 +27,4 @@ jobs:
       - run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
           chmod 700 ~/ssh_key
-          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@3.72.16.158 "sudo docker rm -f draw-app_frontend || true && sudo docker run --name draw-app_frontend -d -p 3001:3001 adityajha02/draw-app-frontend:${{ github.sha }}"
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@35.158.101.166 "sudo docker rm -f draw-app_frontend || true && sudo docker run --name draw-app_frontend -d -p 3001:3001 adityajha02/draw-app-frontend:${{ github.sha }}"
