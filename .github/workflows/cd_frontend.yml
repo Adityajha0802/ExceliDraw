@@ -22,10 +22,12 @@ jobs:
           file: ./docker/Dockerfile.frontend
           build-args: |
             DATABASE_URL=${{ secrets.DATABASE_URL }}
+            NEXT_PUBLIC_BACKEND_URL=http://18.153.107.172:3002
+            NEXT_PUBLIC_WS_URL=ws://18.153.107.172:8080
           push: true
           tags: adityajha02/draw-app-frontend:${{ github.sha }}
           
       - run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
           chmod 700 ~/ssh_key
-          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@18.153.107.172 "sudo docker rm -f draw-app_frontend || true && sudo docker run --name draw-app_frontend -d -p 3001:3001 -e DATABASE_URL='${{ secrets.DATABASE_URL }}' adityajha02/draw-app-frontend:${{ github.sha }}"
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@18.153.107.172 "sudo docker rm -f draw-app_frontend || true && sudo docker run --name draw-app_frontend -d -p 3001:3001 adityajha02/draw-app-frontend:${{ github.sha }}"

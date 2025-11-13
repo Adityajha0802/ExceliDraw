@@ -4,7 +4,14 @@ RUN npm install -g pnpm@latest
 
 WORKDIR /app
 
+# Accept build arguments
 ARG DATABASE_URL
+ARG NEXT_PUBLIC_BACKEND_URL
+ARG NEXT_PUBLIC_WS_URL
+
+# Set environment variables for Next.js build
+ENV NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+ENV NEXT_PUBLIC_WS_URL=${NEXT_PUBLIC_WS_URL}
 
 COPY ./packages ./packages
 
