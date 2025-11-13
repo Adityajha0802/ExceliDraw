@@ -29,3 +29,4 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
           chmod 600 ~/ssh_key
           ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@18.153.107.172 "sudo docker rm -f draw-app_frontend || true && sudo docker run --name draw-app_frontend -d -p 3001:3001 -e DATABASE_URL='${{ secrets.DATABASE_URL }}' adityajha02/draw-app-frontend:${{ github.sha }}"
+          
