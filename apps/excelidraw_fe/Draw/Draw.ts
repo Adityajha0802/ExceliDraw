@@ -36,7 +36,7 @@ type DragState = {
 }
 
 function subtract(p1: point, p2: point): point {
-    return { x: ((p2.x) - (p1.x)), y: ((p2.y) - (p1.y)) };
+    return { x: ((p1.x) - (p2.x)), y: ((p1.y) - (p2.y)) };
 }
 
 function add(p1: point, p2: point): point {
@@ -258,7 +258,7 @@ export class Draw {
         }
         else if (currentTool == "panning") {
             if (this.drag.active) {
-                this.offset = add(this.offset, this.drag.offset);
+                this.offset = add(this.offset,this.drag.offset);
                 this.drag = {
                     start: { x: 0, y: 0 } as point,
                     end: { x: 0, y: 0 } as point,

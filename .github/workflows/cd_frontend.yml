@@ -2,6 +2,7 @@ name: Deploy the frontend
 on:
   push:
     branches: [ main ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,12 +23,12 @@ jobs:
           file: ./docker/Dockerfile.frontend
           build-args: |
             DATABASE_URL=${{ secrets.DATABASE_URL }}
-            NEXT_PUBLIC_BACKEND_URL=http://18.153.107.172/api
-            NEXT_PUBLIC_WS_URL=ws://18.153.107.172/ws
+            NEXT_PUBLIC_BACKEND_URL=http://${{ secrets.EC2_HOST }}/api
+            NEXT_PUBLIC_WS_URL=ws://${{ secrets.EC2_HOST }}/ws
           push: true
           tags: adityajha02/draw-app-frontend:${{ github.sha }}
           
       - run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
           chmod 700 ~/ssh_key
-          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@18.153.107.172 "sudo docker rm -f draw-app_frontend || true && sudo docker run --name draw-app_frontend -d -p 3001:3001 adityajha02/draw-app-frontend:${{ github.sha }}"
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@${{ secrets.EC2_HOST }}"sudo docker rm -f draw-app_frontend || true && sudo docker run --name draw-app_frontend -d -p 3001:3001 adityajha02/draw-app-frontend:${{ github.sha }}"
