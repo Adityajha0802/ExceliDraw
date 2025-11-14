@@ -23,7 +23,7 @@ jobs:
           file: ./docker/Dockerfile.frontend
           build-args: |
             DATABASE_URL=${{ secrets.DATABASE_URL }}
-            NEXT_PUBLIC_BACKEND_URL=http://${{ secrets.EC2_HOST }}/api
+            NEXT_PUBLIC_BACKEND_URL=https://${{ secrets.EC2_HOST }}/api
             NEXT_PUBLIC_WS_URL=ws://${{ secrets.EC2_HOST }}/ws
           push: true
           tags: adityajha02/draw-app-frontend:${{ github.sha }}
