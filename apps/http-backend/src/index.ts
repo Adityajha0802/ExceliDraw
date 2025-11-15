@@ -10,7 +10,7 @@ app.use(express.json())
 app.use(cors());
 
 app.get("/healthcheck", async (req, res) => {
-    res.send("All Okay!haha");
+    res.send("All Okay!");
 })
 
 app.post("/signup", async (req, res) => {
