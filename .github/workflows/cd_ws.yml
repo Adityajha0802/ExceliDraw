@@ -27,4 +27,4 @@ jobs:
       - run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
           chmod 700 ~/ssh_key
-          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@${{ secrets.EC2_HOST }} "sudo docker rm -f draw-app_ws-backend || true && sudo docker run --name draw-app_ws-backend -d -p 8080:8080 -e DATABASE_URL='${{ secrets.DATABASE_URL }}' adityajha02/draw-app-ws-backend:${{ github.sha }}"
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@${{ secrets.EC2_HOST }} "sudo docker rm -f draw-app_ws-backend || true && sudo docker run --name draw-app_ws-backend --restart unless-stopped -d -p 8080:8080 -e DATABASE_URL='${{ secrets.DATABASE_URL }}' adityajha02/draw-app-ws-backend:${{ github.sha }}"

@@ -78,7 +78,7 @@ export const Auth = ({
             router.push("/signin")
 
         } catch (e) {
-            toast.error("Incorrect credentials!")
+            toast.error("Incorrect credentials.Username or Password must be atleast 5 characters long!")
         }
 
 
