@@ -101,12 +101,12 @@ export const Auth = ({
             {isSignin?"Welcome Back !":"Welcome to Collaborative Draw application"}
         </div>
 
-        <div className="text-blue-800 flex justify-center items-center m-2  text-2xl">
+        <div className="text-blue-700 flex justify-center items-center m-2  text-2xl">
                 {isSignin ? "Enter your credentials to access your account" : "Create your account"}
             </div>
         <div className="flex justify-center items-center">
-        <div className="mt-16 rounded-lg p-6 min-h-72 min-w-80 shadow-lg bg-white">
-            <div className="text-blue-900 flex justify-center m-2  text-4xl italic font-semibold">
+        <div className="mt-16 rounded-lg p-6 min-h-72 min-w-80 shadow-lg bg-slate-100">
+            <div className="text-blue-800 flex justify-center m-2  text-4xl italic font-semibold">
                 {isSignin ? "Sign In" : "Sign Up"}
             </div>
             <div>

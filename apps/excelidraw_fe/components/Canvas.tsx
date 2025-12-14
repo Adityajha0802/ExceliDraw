@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react"
-import { ArrowRight, Circle, Hand, LogOut, RectangleHorizontalIcon, SlashIcon } from "lucide-react";
+import { ArrowRight, Circle, Hand, LetterText, LogOut, LucideLetterText, RectangleHorizontalIcon, SlashIcon, Text, TextIcon } from "lucide-react";
 import { Icon } from "./Icons";
 import { Draw } from "@/Draw/Draw";
 import { useRouter } from "next/navigation";
 
-export type Tool = "rectangle" | "circle" | "line" | "arrow" | "panning" | "leave";
+export type Tool = "rectangle" | "circle" | "line" | "arrow" | "panning" |"text"| "leave";
 export function Canvas({ roomId, socket }: {
     roomId: string,
     socket: WebSocket
@@ -47,7 +47,7 @@ export function Canvas({ roomId, socket }: {
         overflow: "hidden",
     }}>
         <ToolBar currentTool={currentTool} setCurrentTool={setCurrentTool} />
-        <>{currentTool === "panning" ? <canvas className="cursor-pointer" ref={canvasRef}></canvas> : <canvas className="cursor-crosshair" ref={canvasRef}></canvas>}
+        <>{currentTool === "panning" ? <canvas className="cursor-grab" ref={canvasRef}></canvas> : <canvas className="cursor-crosshair" ref={canvasRef}></canvas>}
         </>
     </div>
 
@@ -73,6 +73,9 @@ function ToolBar({ currentTool, setCurrentTool }: {
         <Icon icon={<ArrowRight />} onClick={() => {
             setCurrentTool("arrow")
         }} activated={currentTool === "arrow"} />
+        <Icon icon={<TextIcon />} onClick={() => {
+            setCurrentTool("text")
+        }} activated={currentTool === "text"} />
         <Icon icon={<LogOut color="red"/>} onClick={() => {
             setCurrentTool("leave")
         }} activated={currentTool === "leave"} />
