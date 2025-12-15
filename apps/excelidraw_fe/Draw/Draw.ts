@@ -68,6 +68,8 @@ export class Draw {
     private currentTool: Tool = "panning";
     private hasinput: boolean;
     private font: string;
+    private currentInput: HTMLInputElement | null;
+    private inputoffset:number = 25;
 
 
     private getmouse(e: MouseEvent): point {
@@ -84,7 +86,7 @@ export class Draw {
     constructor(canvas: HTMLCanvasElement, roomId: string, socket: WebSocket) {
         this.canvas = canvas;
         this.context = canvas.getContext("2d")!;
-        this.font = "25px monospace";
+        this.font = "25px Arial, sans-serif";
         this.hasinput = false;
         this.existingShapes = [];
         this.roomId = roomId;
@@ -101,6 +103,7 @@ export class Draw {
         this.clicked = false;
         this.startX = 0;
         this.startY = 0;
+        this.currentInput = null;
         this.initDraw();
         this.socketHandlers();
         this.canvasHandler();
@@ -110,6 +113,11 @@ export class Draw {
 
     setTool(tool: Tool) {
         this.currentTool = tool;
+        // Clean up input if switching tools
+        if (tool !== "text") {
+            this.removeInput();
+        }
+
     }
     async initDraw() {
         this.existingShapes = await getExistingShapes(this.roomId);
@@ -173,12 +181,14 @@ export class Draw {
                 this.context.textAlign = 'left';
                 this.context.font = this.font;
                 this.context.fillStyle = "rgba(255,255,255)";
-                console.log("Drawing text:", shape.content, "at", shape.x, shape.y);
-                this.context.fillText(shape.content, shape.x , shape.y  - 6 );
+                this.context.fillText(shape.content, shape.x, shape.y -this.inputoffset );
             }
         })
 
         this.context.restore();
+
+        //if input exists ->update its position
+        this.updateInputPosition();
     }
 
     canvasHandler() {
@@ -375,6 +385,20 @@ export class Draw {
 
     }
 
+    updateInputPosition() {
+        if (!this.currentInput) return;
+
+        const x = parseFloat(this.currentInput.dataset.worldX!);
+        const y = parseFloat(this.currentInput.dataset.worldY!);
+
+        const offsett = this.getoffset();
+        const screenX = (x + offsett.x) / this.zoom + this.center.x;
+        const screenY = (y + offsett.y) / this.zoom + this.center.y;
+
+        this.currentInput.style.left = (screenX) + 'px';
+        this.currentInput.style.top = (screenY + this.inputoffset) + 'px';
+    }
+
     addInput(x: number, y: number) {
 
         const offsett = this.getoffset();
@@ -385,12 +409,12 @@ export class Draw {
         input.type = 'text';
         input.style.position = 'fixed';
         input.style.left = (screenX) + 'px';
-        input.style.top = (screenY + 45) + 'px';
+        input.style.top = (screenY + this.inputoffset ) + 'px';
 
         input.style.width = '200px'; // Give it a visible width
         input.style.height = 'auto'; // Give it a visible height
 
-        // Make it VERY visible for debugging
+        // Input box styling
         input.style.color = "rgba(255,255,255)";
         input.style.backgroundColor = 'transparent';
         input.style.border = 'none';
@@ -399,8 +423,9 @@ export class Draw {
         input.style.caretColor = 'rgba(255,255,255)'; // White cursor
         input.style.boxSizing = 'border-box';
         input.style.font = this.font;
-        input.style.lineHeight = '22px';
-        input.style.transform = 'translateY(0px)';
+        input.style.lineHeight = '1';
+        input.style.verticalAlign = 'middle';
+
 
         // Store the world coordinates on the input element
         input.dataset.worldX = x.toString();
@@ -409,12 +434,13 @@ export class Draw {
         input.onkeydown = this.handleEnter;
 
         document.body.appendChild(input);
-
         input.focus();
 
         this.hasinput = true;
+        this.currentInput = input;
 
     }
+
 
     handleEnter = (e: KeyboardEvent) => {
         const key = e.key;
@@ -440,15 +466,21 @@ export class Draw {
                     };
                     // Finalize, push, draw, and send over socket
                     this.finalizeShape(shape);
+
+
                 }
             }
-
-            // Cleanup happens here for BOTH Enter (with or without text) and Escape
-            if (document.body.contains(inputElement)) {
-                document.body.removeChild(inputElement);
-            }
-            this.hasinput = false;
+            //cleanup
+            this.removeInput();
         }
+    }
+
+    removeInput() {
+        if (this.currentInput && document.body.contains(this.currentInput)) {
+            document.body.removeChild(this.currentInput);
+        }
+        this.currentInput = null;
+        this.hasinput = false;
     }
 
     finalizeShape(shape: Shape) {
@@ -472,11 +504,13 @@ export class Draw {
         }));
     }
 
+
     destroy() {
 
         this.canvas.removeEventListener("wheel", this.MouseWheelHandler);
         this.canvas.removeEventListener("mousedown", this.MouseDownHandler);
         this.canvas.removeEventListener("mouseup", this.MouseUphandler);
         this.canvas.removeEventListener('mousemove', this.MouseMoveHandler);
+        this.removeInput();
     }
 }

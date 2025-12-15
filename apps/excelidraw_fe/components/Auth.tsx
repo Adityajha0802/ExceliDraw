@@ -3,7 +3,7 @@
 import { Input } from "@repo/ui/input";
 import { Button } from "@repo/ui/button";
 import { useEffect, useRef, useState } from "react";
-import { LoaderIcon } from "lucide-react";
+import { LoaderIcon, Pencil, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { BACKEND_URL } from "@/config";
@@ -30,8 +30,8 @@ export const Auth = ({
     }, [])
 
     if (!mounted || loading) {
-        return <div className="h-screen w-screen flex justify-center items-center ">
-            <LoaderIcon size={36} />
+        return <div className="h-screen w-screen flex justify-center items-center bg-slate-950">
+            <LoaderIcon size={36} className="animate-spin text-blue-500" />
         </div>
     }
 
@@ -49,15 +49,13 @@ export const Auth = ({
             localStorage.setItem("token", jwt)
             console.log(res);
 
-            
-            toast.success("You are logged in !");
+            toast.success("You are logged in!");
             router.push("/dashboard")
 
         } catch (e) {
-            toast.error("Invalid usename or password !")
+            toast.error("Invalid username or password!")
         }
     }
-
 
     async function Signup() {
         const username = usernameRef.current?.value.trim();
@@ -73,59 +71,132 @@ export const Auth = ({
 
             console.log(res);
 
-
             toast.success("Your account has been created successfully!")
             router.push("/signin")
 
         } catch (e) {
-            toast.error("Incorrect credentials.Username or Password must be atleast 5 characters long!")
+            toast.error("Incorrect credentials. Username or Password must be at least 5 characters long!")
         }
-
-
     }
 
+    return (
+        <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 h-screen w-screen overflow-hidden flex items-center justify-center p-4">
+            <ToastContainer 
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark" 
+            />
 
+            {/* Decorative background elements */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+            </div>
 
-    return <div className="bg-slate-900 h-screen w-screen overflow-hidden ">
-        <ToastContainer position="top-center"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="dark" />
-        <div className="flex justify-center mt-8 font-bold text-white text-4xl italic ">
-            {isSignin?"Welcome Back !":"Welcome to Collaborative Draw application"}
-        </div>
-
-        <div className="text-blue-700 flex justify-center items-center m-2  text-2xl">
-                {isSignin ? "Enter your credentials to access your account" : "Create your account"}
-            </div>
-        <div className="flex justify-center items-center">
-        <div className="mt-16 rounded-lg p-6 min-h-72 min-w-80 shadow-lg bg-slate-100">
-            <div className="text-blue-800 flex justify-center m-2  text-4xl italic font-semibold">
-                {isSignin ? "Sign In" : "Sign Up"}
-            </div>
-            <div>
-                <Input className="p-2 m-1 placeholder-gray-500 text-black border border-gray-200 w-full rounded-md shadow-md " reference={usernameRef} placeholder="username" type="text" />
-            </div>
-            {!isSignin && (
-                <div>
-                    <Input className="p-2 m-1 placeholder-gray-500 text-black border border-gray-200 w-full rounded-md shadow-md" reference={emailRef} placeholder="email" type="text" />
+            <div className="relative z-10 w-full max-w-md">
+                {/* Logo/Icon */}
+                <div className="flex justify-center mb-8">
+                    <div className="relative">
+                        <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl"></div>
+                        <div className="relative bg-gradient-to-br from-blue-500 to-blue-600 p-4 rounded-2xl shadow-xl">
+                            {isSignin ? (
+                                <Users className="w-8 h-8 text-white" />
+                            ) : (
+                                <Pencil className="w-8 h-8 text-white" />
+                            )}
+                        </div>
+                    </div>
                 </div>
-            )}
-            <div>
-                <Input className="p-2 m-1 placeholder-gray-500 text-black border border-gray-200 w-full rounded-md shadow-md " reference={passwordRef} placeholder="password (5+ characters)" type="password" />
-            </div>
-            <div >
-                <Button onClick={() => {
-                    { isSignin ? Signin() : Signup() }
-                }} className="text-lg p-3 m-1 mt-3 bg-blue-700 text-white  w-full rounded-md font-normal cursor-pointer border border-gray-600 shadow-lg" children={isSignin ? "Sign In" : "Sign Up"} />
+
+                {/* Header */}
+                <div className="text-center mb-8">
+                    <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                        {isSignin ? "Welcome Back!" : "Join Us"}
+                    </h1>
+                    <p className="text-slate-400 text-sm md:text-base">
+                        {isSignin 
+                            ? "Enter your credentials to access your account" 
+                            : "Create your account to start collaborating"}
+                    </p>
+                </div>
+
+                {/* Auth Form */}
+                <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 shadow-2xl border border-slate-700/50">
+                    <div className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium text-slate-300 mb-2">
+                                Username
+                            </label>
+                            <Input 
+                                className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
+                                reference={usernameRef} 
+                                placeholder="Enter your username" 
+                                type="text" 
+                            />
+                        </div>
+
+                        {!isSignin && (
+                            <div>
+                                <label className="block text-sm font-medium text-slate-300 mb-2">
+                                    Email
+                                </label>
+                                <Input 
+                                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
+                                    reference={emailRef} 
+                                    placeholder="Enter your email" 
+                                    type="email" 
+                                />
+                            </div>
+                        )}
+
+                        <div>
+                            <label className="block text-sm font-medium text-slate-300 mb-2">
+                                Password
+                            </label>
+                            <Input 
+                                className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
+                                reference={passwordRef} 
+                                placeholder="Enter your password (5+ characters)" 
+                                type="password" 
+                            />
+                        </div>
+
+                        <Button 
+                            onClick={() => {
+                                isSignin ? Signin() : Signup()
+                            }} 
+                            className="w-full py-3 mt-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+                        >
+                            {isSignin ? "Sign In" : "Create Account"}
+                        </Button>
+                    </div>
+
+                    {/* Toggle Auth Mode */}
+                    <div className="mt-6 text-center">
+                        <p className="text-slate-400 text-sm">
+                            {isSignin ? "Don't have an account? " : "Already have an account? "}
+                            <button
+                                onClick={() => router.push(isSignin ? "/signup" : "/signin")}
+                                className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                            >
+                                {isSignin ? "Sign Up" : "Sign In"}
+                            </button>
+                        </p>
+                    </div>
+                </div>
+
+                {/* Footer Text */}
+                <p className="text-center text-slate-500 text-xs mt-6">
+                    Collaborative Draw - Create together in real-time
+                </p>
             </div>
         </div>
-        </div>
-    </div>
+    );
 }
